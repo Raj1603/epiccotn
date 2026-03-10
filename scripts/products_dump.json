@@ -1,0 +1,240 @@
+[
+  {
+    "id": "9329ddc5-ee21-489c-bdc6-4906a8756343",
+    "name": "Kevlar Cable 3M",
+    "slug": "kevlar-cable-3m",
+    "description": "Extra long rugged cable.",
+    "price": 35,
+    "compare_at_price": null,
+    "images": [
+      "/images/rugged_kevlar_cable.png"
+    ],
+    "category_id": "5a8e8dd6-e5d0-4a93-8eb8-f659064b2203",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "9cc49644-22dc-492f-b37c-d63bed0d653e",
+    "name": "Modern Passport Wallet",
+    "slug": "modern-passport-wallet",
+    "description": "Carry your essentials in style.",
+    "price": 80,
+    "compare_at_price": null,
+    "images": [
+      "/images/modern_passport_wallet.png"
+    ],
+    "category_id": "7d689aa6-04a1-4e0e-9e9e-83999aa0d913",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "77fee0e1-474d-42c0-8509-af718b5d139d",
+    "name": "Rugged Archive Wallet",
+    "slug": "rugged-archive-wallet",
+    "description": "Built for adventure.",
+    "price": 70,
+    "compare_at_price": null,
+    "images": [
+      "/images/leather-folio-brown.jpg"
+    ],
+    "category_id": "7d689aa6-04a1-4e0e-9e9e-83999aa0d913",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "c5fa3789-7560-4e19-a6cb-3320157adba3",
+    "name": "Card Wallet Plus",
+    "slug": "card-wallet-plus",
+    "description": "Minimalist carry.",
+    "price": 50,
+    "compare_at_price": null,
+    "images": [
+      "/images/card_wallet_plus.png"
+    ],
+    "category_id": "6074ae77-12f8-4d58-b172-b065a973150e",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "c3eb2c5f-fa9c-4671-814f-cc5936a59a5d",
+    "name": "30W Car Charger",
+    "slug": "30w-car-charger",
+    "description": "Fast charging for your road trips.",
+    "price": 30,
+    "compare_at_price": null,
+    "images": [
+      "/images/base-one-max-black.jpg"
+    ],
+    "category_id": "5a8e8dd6-e5d0-4a93-8eb8-f659064b2203",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "eae4d1a7-0471-4394-832b-ec831366a794",
+    "name": "MagSafe Mount",
+    "slug": "magsafe-mount",
+    "description": "Secure mount for your iPhone.",
+    "price": 40,
+    "compare_at_price": null,
+    "images": [
+      "/images/base-one-max-silver.jpg"
+    ],
+    "category_id": "5a8e8dd6-e5d0-4a93-8eb8-f659064b2203",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "8f47a259-3fbc-446f-9fb5-9c9b87650a30",
+    "name": "Travel Organizer",
+    "slug": "travel-organizer",
+    "description": "Keep everything in one place.",
+    "price": 60,
+    "compare_at_price": null,
+    "images": [
+      "/images/leather-folio-brown.jpg"
+    ],
+    "category_id": "7d689aa6-04a1-4e0e-9e9e-83999aa0d913",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "2ae3f8f2-1cee-4b39-8253-f1dc6ab01258",
+    "name": "Titanium Band",
+    "slug": "titanium-band-pro",
+    "description": "Grade 2 Titanium.",
+    "price": 200,
+    "compare_at_price": null,
+    "images": [
+      "/images/titanium-band-silver.jpg"
+    ],
+    "category_id": "e5110e3b-33fd-4ef9-a880-8a1adc2bcf91",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "1dcc7dd2-a431-4912-adea-279ec3f900b8",
+    "name": "Sport Band",
+    "slug": "sport-band-orange",
+    "description": "FKM rubber for active lifestyles.",
+    "price": 60,
+    "compare_at_price": null,
+    "images": [
+      "/images/sport-band-orange.jpg"
+    ],
+    "category_id": "e5110e3b-33fd-4ef9-a880-8a1adc2bcf91",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "87ec880d-7f5c-451e-af27-02e53159dfdf",
+    "name": "Base One Max",
+    "slug": "base-one-max",
+    "description": "MagSafe & Apple Watch charging station.",
+    "price": 155,
+    "compare_at_price": null,
+    "images": [
+      "/images/base-one-max-black.jpg"
+    ],
+    "category_id": "754bf5bc-14a4-4b69-8469-b182000f210f",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-11T14:50:23.809461+00:00"
+  },
+  {
+    "id": "37a89ff7-63f7-4249-8288-581fb6f09aac",
+    "name": "Base One Max",
+    "slug": "base-one-max-mag",
+    "description": "MagSafe charging station.",
+    "price": 150,
+    "compare_at_price": null,
+    "images": [
+      "/images/base-one-max-black.jpg"
+    ],
+    "category_id": "a971c904-81fe-4293-93ba-1c6b3f151388",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "0d0e78f2-ca3e-4b7f-8b20-41e8cd9d495a",
+    "name": "Leather Mag Wallet Find My Tracking",
+    "slug": "leather-mag-wallet-find-my-tracking",
+    "description": "Leather Mag Wallet\n\nLeather Mag Wallet snaps securely onto your iPhone with MagSafe and is trackable with Apple Find My so you’re never left searching.",
+    "price": 6099,
+    "compare_at_price": null,
+    "images": [
+      "/images/leather_mag_wallet.png"
+    ],
+    "category_id": "ba6d2a4b-61c2-41a3-98d6-a922cc02df39",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-13T10:37:30.619401+00:00"
+  },
+  {
+    "id": "63d4e469-8de2-422b-bb0d-1ef4f7d81d50",
+    "name": "Modern Leather Case",
+    "slug": "modern-leather-case",
+    "description": "Horween leather case for iPhone.",
+    "price": 55,
+    "compare_at_price": null,
+    "images": [
+      "/images/modern_leather_case_brown.png"
+    ],
+    "category_id": "642c4e22-5cde-4a21-b2ae-e96c71e427f6",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-11T14:50:23.809461+00:00"
+  },
+  {
+    "id": "a00d4b8f-a62d-4091-aa8c-ba79cbea3678",
+    "name": "Bifold Wallet",
+    "slug": "bifold-wallet",
+    "description": "Traditional capacity, modern materials.",
+    "price": 80,
+    "compare_at_price": null,
+    "images": [
+      "/images/bifold.jpg"
+    ],
+    "category_id": "6074ae77-12f8-4d58-b172-b065a973150e",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "862e9f81-f8fd-46c0-af5e-1028469e1bee",
+    "name": "Stand Wallet",
+    "slug": "stand-wallet",
+    "description": "Wallet that doubles as a stand.",
+    "price": 60,
+    "compare_at_price": null,
+    "images": [
+      "/images/tracking_card.jpg"
+    ],
+    "category_id": "6074ae77-12f8-4d58-b172-b065a973150e",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "9f4f19ef-885c-4d5a-afa5-c46761f116c2",
+    "name": "Modern Leather Case",
+    "slug": "modern-leather-case-17",
+    "description": "Horween Leather for iPhone 17.",
+    "price": 50,
+    "compare_at_price": null,
+    "images": [
+      "/images/modern_leather_case_brown.png"
+    ],
+    "category_id": "befcc4b1-43c2-496f-b1a1-d262053da382",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-12T09:34:56.109993+00:00"
+  },
+  {
+    "id": "b9e0dbb2-11d3-4751-b9d7-b925a8b822d4",
+    "name": "Pen",
+    "slug": "pen",
+    "description": "pen\n\nPerfectly weighted in hand, this titanium pen offers a smooth, controlled writing experience.",
+    "price": 4000,
+    "compare_at_price": null,
+    "images": [
+      "/images/modern_titanium_pen.png"
+    ],
+    "category_id": "4dc599ad-72a0-4b6b-a23f-dd5c1b4bce48",
+    "stock_status": "in_stock",
+    "created_at": "2026-01-13T10:51:54.923689+00:00"
+  }
+]
