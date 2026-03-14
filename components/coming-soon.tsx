@@ -56,7 +56,7 @@ export function ComingSoon() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-12"
         >
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.2em] uppercase mb-2">
+          <h1 className="text-4xl md:text-6xl font-medium tracking-[0.2em] uppercase mb-2">
             Epic Cotton
           </h1>
           <div className="w-64 h-px bg-white/30 mx-auto border-b border-dashed border-white/50" />
@@ -68,7 +68,7 @@ export function ComingSoon() {
           transition={{ duration: 1, delay: 0.2 }}
           className="mb-16"
         >
-          <h2 className="text-5xl md:text-8xl font-light tracking-wider uppercase mb-4">
+          <h2 className="text-5xl md:text-8xl font-normal tracking-wider uppercase mb-4">
             We Are Developing
           </h2>
           <div className="max-w-3xl h-px bg-white/30 mx-auto border-b border-dashed border-white/50" />
@@ -80,12 +80,12 @@ export function ComingSoon() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="w-full max-w-xl bg-black/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-2xl"
         >
-          <h3 className="text-2xl font-semibold mb-2">Contact Us</h3>
+          <h3 className="text-2xl font-medium mb-2">Contact Us</h3>
           <p className="text-white/70 mb-8 italic">Drop us a line!</p>
 
           {status === "success" ? (
             <div className="py-8 text-center">
-              <p className="text-green-400 text-lg font-semibold">✓ Message sent!</p>
+              <p className="text-green-400 text-lg font-medium">✓ Message sent!</p>
               <p className="text-white/60 mt-2 text-sm">We&apos;ll get back to you soon.</p>
               <button
                 onClick={() => setStatus("idle")}
@@ -100,30 +100,30 @@ export function ComingSoon() {
                 <Input
                   name="name"
                   placeholder="Name"
-                  className="bg-white/5 border-white/10 focus:border-white/30 transition-colors h-12"
+                  className="bg-white/5 border-white/10 focus:border-white/30 transition-colors h-12 font-serif"
                   required
                 />
                 <Input
                   type="email"
                   name="email"
                   placeholder="Email"
-                  className="bg-white/5 border-white/10 focus:border-white/30 transition-colors h-12"
+                  className="bg-white/5 border-white/10 focus:border-white/30 transition-colors h-12 font-serif"
                   required
                 />
               </div>
               <Textarea
                 name="message"
                 placeholder="Message"
-                className="bg-white/5 border-white/10 focus:border-white/30 transition-colors min-h-[120px]"
+                className="bg-white/5 border-white/10 focus:border-white/30 transition-colors min-h-[120px] font-serif"
                 required
               />
               {status === "error" && (
-                <p className="text-red-400 text-sm">Oops! Something went wrong. Please try again.</p>
+                <p className="text-red-400 text-sm font-serif">Oops! Something went wrong. Please try again.</p>
               )}
               <Button
                 type="submit"
                 disabled={status === "sending"}
-                className="w-full h-12 bg-white text-black hover:bg-white/90 transition-all font-bold text-lg rounded-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                className="w-full h-12 bg-white text-black hover:bg-white/90 transition-all font-semibold text-lg rounded-lg flex items-center justify-center gap-2 disabled:opacity-60 font-serif"
               >
                 <Send className="w-4 h-4" />
                 {status === "sending" ? "Sending…" : "Send Message"}
@@ -136,7 +136,7 @@ export function ComingSoon() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="mt-8 text-white/40 text-sm tracking-widest uppercase"
+          className="mt-8 text-white/40 text-sm tracking-widest uppercase font-serif"
         >
           Our new site is coming soon
         </motion.p>
