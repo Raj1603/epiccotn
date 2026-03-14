@@ -66,11 +66,12 @@ function LoginContent() {
     return (
         <div suppressHydrationWarning className="min-h-screen grid lg:grid-cols-2">
             <div className="hidden lg:block relative bg-neutral-900">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1616410011236-7a42121dd981?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-50" />
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-60" />
                 <div className="relative h-full flex items-center justify-center p-12">
-                    <div className="text-white max-w-lg">
-                        <h1 className="text-4xl font-bold mb-6">Welcome Back</h1>
-                        <p className="text-lg text-white/80">Manage your orders, saved items, and account details.</p>
+                    <div className="text-white max-w-lg text-center">
+                        <h1 className="text-4xl font-bold mb-6 font-serif">Epiccotn<span className="text-primary">™</span></h1>
+                        <h2 className="text-3xl font-bold mb-4">Welcome Back</h2>
+                        <p className="text-lg text-white/90 font-light">Experience the future of innerwear. Manage your orders and wellness journey.</p>
                     </div>
                 </div>
             </div>

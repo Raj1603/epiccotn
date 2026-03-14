@@ -19,6 +19,30 @@ const nomadFallbacks: {
     },
 }
 
+// Helper to check if a product is wellness-relevant
+function isWellnessProduct(item: any): boolean {
+    const name = (item.name || '').toLowerCase()
+    const categoryName = (item.categories?.name || '').toLowerCase()
+    const description = (item.description || '').toLowerCase()
+
+    // STRICT EXCLUSION LIST (Foolproof)
+    const blockList = [
+        "gan nano", "nomad", "hub", "power bank", "case", "wallet",
+        "cable", "apple watch", "smart watch", "kevlar", "band", "polish",
+        "honey", "pet", "bowl", "leash", "toy", "mat", "dumbbell",
+        "bottle", "cleanser", "roller", "gua sha", "scale", "toothbrush",
+        "charger", "adapter", "iphone", "pixel", "samsung", "watch"
+    ]
+
+    const isBlocked = blockList.some(term => name.includes(term) || description.includes(term))
+    
+    // Check if it belongs to a wellness category or is explicitly tagged as wellness
+    const hasWellnessKeyword = name.includes("wellness") || name.includes("panty") || name.includes("underwear") || name.includes("comfort")
+    const isWellnessCategory = categoryName.includes("wellness") || categoryName.includes("daily") || categoryName.includes("care") || categoryName.includes("recovery")
+
+    return !isBlocked && (isWellnessCategory || hasWellnessKeyword)
+}
+
 // Mapper to convert DB product to UI Product
 function mapProduct(item: any): Product {
     // Sanitization Helper
@@ -135,24 +159,8 @@ export async function getNotifications(): Promise<Notification[]> {
 
     if (error || !latestProducts) return []
 
-    // Filter out legacy tech items and ensure only wellness-appropriate products are shown
-    const wellnessProducts = latestProducts.filter((p: any) => {
-        const name = p.name.toLowerCase();
-        const category = p.categories?.name?.toLowerCase() || "";
-        
-        // STRICT EXCLUSION LIST (Foolproof)
-        const blockList = [
-            "gan nano", "nomad", "hub", "power bank", "case", "wallet", 
-            "cable", "apple watch", "kevlar", "band", "polish", "honey", 
-            "pet", "bowl", "leash", "toy", "mat", "dumbbell", "bottle", 
-            "cleanser", "roller", "gua sha", "scale", "toothbrush"
-        ];
-        
-        const isBlocked = blockList.some(term => name.includes(term));
-        const isWellnessCategory = category.includes("wellness") || category.includes("daily");
-        
-        return !isBlocked && isWellnessCategory;
-    })
+    // Filter using shared wellness logic
+    const wellnessProducts = latestProducts.filter(isWellnessProduct)
 
     return wellnessProducts.map((p: any) => ({
         id: p.id,
@@ -200,22 +208,7 @@ export async function getProducts(): Promise<Product[]> {
     }
 
     // Filter out legacy products from the entire app view
-    const wellnessItems = data.filter((item: any) => {
-        const name = item.name.toLowerCase();
-        const category = item.categories?.name?.toLowerCase() || "";
-        
-        const blockList = [
-            "osyndo", "nomad", "gan nano", "hub", "power bank", "case", 
-            "wallet", "cable", "apple watch", "kevlar", "band", "polish", 
-            "honey", "pet", "bowl", "leash", "toy", "mat", "dumbbell", 
-            "bottle", "cleanser", "roller", "gua sha"
-        ];
-        
-        const isBlocked = blockList.some(term => name.includes(term));
-        const isWellnessCategory = category.includes("wellness") || category.includes("daily");
-
-        return !isBlocked && isWellnessCategory;
-    })
+    const wellnessItems = data.filter(isWellnessProduct)
 
     return wellnessItems.map(mapProduct)
 }
@@ -271,7 +264,7 @@ export async function getProductsByCategory(slug: string): Promise<Product[]> {
         return []
     }
 
-    return data.map(mapProduct)
+    return data.filter(isWellnessProduct).map(mapProduct)
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
@@ -292,8 +285,7 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 
     const { data, error } = await query.single()
 
-    if (error || !data) return undefined
-
+    if (error || !data || !isWellnessProduct(data)) return undefined
     return mapProduct(data)
 }
 
@@ -372,7 +364,7 @@ export async function searchProducts(query: string): Promise<Product[]> {
         return []
     }
 
-    return data.map(mapProduct)
+    return data.filter(isWellnessProduct).map(mapProduct)
 }
 
 export async function getAdminStats() {

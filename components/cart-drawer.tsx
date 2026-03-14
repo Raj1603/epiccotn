@@ -28,14 +28,14 @@ const FALLBACK_SUGGESTIONS = [
   {
     name: "Cotton Essentials Pack",
     subtitle: "Silver Edition • 3-Pack",
-    image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?q=80&w=800",
-    href: "#",
+    image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?q=80&w=800", // Generic comfy cotton image
+    href: "/products/cotton-essentials-pack",
   },
   {
     name: "Seamless Wellness Set",
     subtitle: "Eco-Friendly • Bamboo Fiber",
-    image: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=800",
-    href: "#",
+    image: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=800", // Generic wellness set
+    href: "/products/seamless-wellness-set",
   },
 ]
 

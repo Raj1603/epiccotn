@@ -94,10 +94,10 @@ function SignupContent() {
         return (
             <div className="min-h-screen grid lg:grid-cols-2">
                 <div className="hidden lg:block relative bg-neutral-900">
-                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-50" />
+                    <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-60" />
                     <div className="relative h-full flex items-center justify-center p-12">
-                        <div className="text-white max-w-lg">
-                            <h1 className="text-4xl font-bold mb-6 font-serif italic">Osyndo®</h1>
+                        <div className="text-white max-w-lg text-center">
+                            <h1 className="text-4xl font-bold mb-6 font-serif">Epiccotn<span className="text-primary">™</span></h1>
                             <h2 className="text-3xl font-bold mb-4">Almost there.</h2>
                             <p className="text-lg text-white/80">We've sent a verification link to your email. Once confirmed, you'll be redirected to continue where you left off.</p>
                         </div>
@@ -154,10 +154,13 @@ function SignupContent() {
     return (
         <div className="min-h-screen grid lg:grid-cols-2">
             <div className="hidden lg:block relative bg-neutral-900">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-50" />
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/science.png')] bg-cover bg-center opacity-60" />
                 <div className="relative h-full flex items-center justify-center p-12">
-                    <div className="text-white max-w-lg">
-                        <h1 className="text-4xl font-bold mb-6">Join Osyndo</h1>
+                    <div className="text-white max-w-lg text-center">
+                        <h1 className="text-4xl font-bold mb-6 font-serif">Epiccotn<span className="text-primary">™</span></h1>
+                        <p className="text-lg text-white/90 font-light italic">Natural Wisdom & Modern Science</p>
+                        <hr className="my-6 border-white/20" />
+                        <h2 className="text-3xl font-bold mb-4">Join Epiccotn</h2>
                         <p className="text-lg text-white/80">Create an account to track orders and get exclusive access.</p>
                     </div>
                 </div>
