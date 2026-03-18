@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Instagram, Facebook, Youtube } from "lucide-react"
+import { NewsletterForm } from "./newsletter-form"
 
 const footerLinks = {
   wellness: [
@@ -8,7 +9,7 @@ const footerLinks = {
     { name: "Community", href: "#" },
   ],
   science: [
-    { name: "Silver Ion Tech", href: "/#science" },
+    { name: "Advanced Tech", href: "/#science" },
     { name: "Probiotic Finish", href: "/#science" },
     { name: "Ethical Sourcing", href: "/#science" },
   ],
@@ -22,30 +23,23 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 wellness-theme" suppressHydrationWarning>
-      <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24" suppressHydrationWarning>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12" suppressHydrationWarning>
+    <footer id="contact" className="bg-gradient-to-b from-gray-50 to-white border-t border-gray-100 wellness-theme relative overflow-hidden" suppressHydrationWarning>
+      <div className="absolute top-0 right-0 w-[60rem] h-[60rem] bg-[var(--primary)]/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+      
+      <div className="max-w-7xl mx-auto px-6 py-24 lg:py-32 relative z-10" suppressHydrationWarning>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-16 lg:gap-20" suppressHydrationWarning>
 
-          <div className="col-span-2 lg:col-span-2 space-y-8" suppressHydrationWarning>
-            <span className="text-3xl font-serif font-bold text-gray-900 tracking-tight">
-              Epiccotn<span className="text-[var(--primary)]">™</span>
+          <div className="col-span-2 lg:col-span-2 space-y-10" suppressHydrationWarning>
+            <span className="text-4xl md:text-5xl font-sans font-black text-gray-900 tracking-tighter">
+              Epiccotn<span className="text-[var(--primary)] text-5xl leading-none">.</span>
             </span>
-            <p className="text-gray-500 max-w-sm leading-relaxed">
+            <p className="text-gray-500 max-w-sm leading-relaxed text-lg font-light">
               Fusing natural wisdom with modern textile science to empower women's health and daily confidence.
             </p>
 
-            <div className="space-y-4 max-w-sm">
-              <h4 className="text-xs font-bold text-gray-900 uppercase tracking-widest font-serif">Join the Wellness Journey</h4>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-2 text-sm bg-gray-50 border border-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all"
-                />
-                <button className="px-6 py-2 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-black transition-all">
-                  Subscribe
-                </button>
-              </div>
+            <div className="space-y-5 max-w-sm pt-4">
+              <h4 className="text-xs font-black text-gray-900 uppercase tracking-[0.2em] font-sans">Join the Wellness Journey</h4>
+              <NewsletterForm />
               <p className="text-[10px] text-gray-400">By subscribing, you agree to our Privacy Policy.</p>
             </div>
 
@@ -57,7 +51,7 @@ export function Footer() {
           </div>
 
           <div suppressHydrationWarning>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6 font-serif">Wellness</h3>
+            <h3 className="text-xs font-bold text-gray-900 uppercase tracking-[0.2em] mb-8 font-sans">Wellness</h3>
             <ul className="space-y-4">
               {footerLinks.wellness.map((link) => (
                 <li key={link.name}>
@@ -70,7 +64,7 @@ export function Footer() {
           </div>
 
           <div suppressHydrationWarning>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6 font-serif">Science</h3>
+            <h3 className="text-xs font-bold text-gray-900 uppercase tracking-[0.2em] mb-8 font-sans">Science</h3>
             <ul className="space-y-4">
               {footerLinks.science.map((link) => (
                 <li key={link.name}>
@@ -83,7 +77,7 @@ export function Footer() {
           </div>
 
           <div suppressHydrationWarning>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6 font-serif">Support</h3>
+            <h3 className="text-xs font-bold text-gray-900 uppercase tracking-[0.2em] mb-8 font-sans">Support</h3>
             <ul className="space-y-4">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>

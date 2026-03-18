@@ -1,13 +1,11 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter, Playfair_Display, Lora } from "next/font/google"
+import { DM_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "sonner"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
-const lora = Lora({ subsets: ["latin"], variable: "--font-lora" })
+const googleSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
   title: "Epiccotn | The Everyday Panty",
@@ -30,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${inter.variable} ${playfair.variable} ${lora.variable} font-sans antialiased bg-white`}>
+      <body suppressHydrationWarning className={`${googleSans.variable} font-sans antialiased bg-white`}>
         {children}
         <Toaster position="top-right" expand={true} richColors />
         <Analytics />

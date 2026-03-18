@@ -6,7 +6,7 @@ import { Metadata } from "next"
 
 export const metadata: Metadata = {
     title: "Everyday Panty | Epiccotn",
-    description: "Experience the ultimate in comfort and wellness with the Epiccotn Everyday Panty. Featuring Silver Ion infusion, Probiotic finish, and Organic Bamboo/Lyocell fabric.",
+    description: "Experience the ultimate in comfort and wellness with the Epiccotn Everyday Panty. Featuring Probiotic finish, and Organic Bamboo/Lyocell fabric.",
 }
 
 export default async function EverydayPantyPage() {

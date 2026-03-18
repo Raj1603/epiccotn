@@ -27,7 +27,7 @@ const FALLBACK_SUGGESTIONS = [
   },
   {
     name: "Cotton Essentials Pack",
-    subtitle: "Silver Edition • 3-Pack",
+    subtitle: "Everyday • 3-Pack",
     image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?q=80&w=800",
     href: "#",
   },

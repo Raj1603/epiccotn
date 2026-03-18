@@ -3,7 +3,6 @@ import { Footer } from "@/components/footer"
 import { getNavigationCategories, getNotifications } from "@/lib/fetchers"
 import { WellnessProductDetail } from "@/components/wellness-product-detail"
 import { WellnessCommunity } from "@/components/wellness-community"
-import { WellnessReviews } from "@/components/wellness-reviews"
 
 export default async function HomePage() {
   const [notifications] = await Promise.all([
@@ -24,7 +23,6 @@ export default async function HomePage() {
       <main className="pt-20">
         <WellnessProductDetail product={product} />
         <WellnessCommunity />
-        <WellnessReviews />
       </main>
       <Footer />
     </div>

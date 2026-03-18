@@ -15,7 +15,7 @@ const TESTIMONIALS = [
     {
         name: "Elena G.",
         role: "Yoga Instructor",
-        text: "The fabric feels like a second skin. Knowing it's infused with silver for hygiene gives me so much peace of mind during practice.",
+        text: "The fabric feels like a second skin. Knowing it's designed for hygiene gives me so much peace of mind during practice.",
         rating: 5,
         image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200&h=200"
     },

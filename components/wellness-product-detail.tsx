@@ -298,16 +298,6 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
 
                             <div className="grid gap-8">
                                 <motion.div variants={childFade} className="flex gap-4">
-                                    <div className="bg-[var(--accent)]/20 p-4 rounded-xl h-fit">
-                                        <Shield className="text-[var(--accent)] w-6 h-6" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-xl font-serif mb-2 text-gray-900">Silver Ion Infusion</h4>
-                                        <p className="text-gray-600">Pure silver particles woven into the threads eliminate 99.9% of odor-causing bacteria permanently.</p>
-                                    </div>
-                                </motion.div>
-
-                                <motion.div variants={childFade} className="flex gap-4">
                                     <div className="bg-[var(--primary)]/20 p-4 rounded-xl h-fit">
                                         <Droplets className="text-[var(--primary)] w-6 h-6" />
                                     </div>
@@ -323,42 +313,49 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
             </section>
 
             {/* Fabric Section */}
-            <section className="py-24 bg-[var(--background)]">
-                <div className="container mx-auto px-6">
-                    <div className="grid md:grid-cols-2 gap-16 items-center flex-row-reverse">
+            <section className="py-24 px-6 md:px-12">
+                <div className="container mx-auto max-w-7xl bg-[var(--accent)]/30 rounded-[3rem] p-10 md:p-24 overflow-hidden relative">
+                    <div className="absolute -top-40 -right-40 w-[40rem] h-[40rem] bg-white/60 rounded-full blur-[100px] pointer-events-none"></div>
+                    
+                    <div className="grid md:grid-cols-2 gap-16 items-center relative z-10 flex-row-reverse">
                         <motion.div
                             {...staggeredFade}
                             className="order-2 md:order-1"
                         >
-                            <h2 className="text-4xl font-serif mb-6">The Wisdom of Trees</h2>
-                            <p className="text-gray-600 text-lg mb-8">
-                                Ethically sourced, incredibly soft. Our blend of Organic Bamboo and Lyocell is 3x more breathable than cotton and uses 80% less water to produce.
+                            <span className="text-green-800 font-bold uppercase tracking-widest text-sm mb-4 block">Signature Material</span>
+                            <h2 className="text-4xl md:text-5xl font-sans mb-8 text-gray-900 leading-tight">The Wisdom of Trees.</h2>
+                            <p className="text-gray-800 text-xl mb-12 leading-relaxed font-light">
+                                Ethically sourced, incredibly soft. Our proprietary blend of <strong className="text-green-900 font-bold bg-white/50 px-2 rounded-md">Organic Bamboo</strong> and Lyocell is 3x more breathable than standard cotton and requires 80% less water to produce.
                             </p>
 
                             <div className="grid grid-cols-2 gap-6">
-                                <div className="flex items-center gap-3">
-                                    <Leaf className="text-[var(--accent)]" />
-                                    <span className="text-gray-700 font-medium">Sustainable Sourcing</span>
+                                <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
+                                    <div className="bg-green-100 p-3 rounded-full mb-4">
+                                        <Leaf className="text-green-700 w-6 h-6" />
+                                    </div>
+                                    <span className="text-gray-900 font-bold text-sm uppercase tracking-wide">Sustainable<br/>Sourcing</span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <Wind className="text-[var(--accent)]" />
-                                    <span className="text-gray-700 font-medium">Ultra Breathable</span>
+                                <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
+                                    <div className="bg-blue-50 p-3 rounded-full mb-4">
+                                        <Wind className="text-blue-500 w-6 h-6" />
+                                    </div>
+                                    <span className="text-gray-900 font-bold text-sm uppercase tracking-wide">Ultra<br/>Breathable</span>
                                 </div>
                             </div>
                         </motion.div>
 
                         <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
-                            className="relative h-[500px] order-1 md:order-2"
+                            className="relative h-[400px] md:h-[500px] order-1 md:order-2 w-full"
                         >
                             <Image
                                 src="/images/epiccotn/pocket.png"
-                                alt="Epiccotn Hidden Pocket Feature"
+                                alt="Epiccotn Bamboo Fabric Detail"
                                 fill
-                                className="object-contain rounded-[2.5rem]"
+                                className="object-cover rounded-[2rem] shadow-xl border-4 border-white"
                             />
                         </motion.div>
                     </div>
@@ -453,15 +450,11 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                         {[
                             {
                                 q: "How do I care for my Everyday Panty?",
-                                a: "Machine wash on cold with like colors. Tumble dry on low or hang dry to preserve the probiotic finish and silver ion infusion. Avoid bleach and fabric softeners."
+                                a: "Machine wash on cold with like colors. Tumble dry on low or hang dry to preserve the probiotic finish. Avoid bleach and fabric softeners."
                             },
                             {
                                 q: "What is the primary material?",
                                 a: "Our signature blend consists of 65% Organic Bamboo, 30% Lyocell, and 5% Spandex for the perfect balance of breathability, softness, and stretch."
-                            },
-                            {
-                                q: "How does the silver ion technology work?",
-                                a: "Pure silver is woven directly into the fabric at a molecular level. Silver is naturally antimicrobial and interrupts the cell membrane of odor-causing bacteria, eliminating them on contact."
                             },
                             {
                                 q: "Is the probiotic finish safe for sensitive skin?",
@@ -516,7 +509,6 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                                 {[
                                     { f: "Seamless/Invisible Fit", e: "Yes (Core)", t: "No (Thick)", s: "Variable" },
                                     { f: "Organic Bamboo/Lyocell", e: "Yes (Core)", t: "No", s: "No" },
-                                    { f: "Silver Ion Infusion", e: "Yes (Antimicrobial)", t: "No", s: "No" },
                                     { f: "Probiotic Textile Finish", e: "Yes (Refined)", t: "No", s: "No" },
                                     { f: "Built-in Pad Holder", e: "Yes (Integrated)", t: "No", s: "Optional" },
                                     { f: "Hidden Front Pocket", e: "Yes (Functional)", t: "No", s: "No" },

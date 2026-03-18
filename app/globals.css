@@ -82,10 +82,10 @@
 }
 
 @theme inline {
-  --font-sans: "Inter", "Inter Fallback", sans-serif;
-  --font-serif: "Playfair Display", "Playfair Display Fallback", serif;
+  --font-sans: "Google Sans", "Product Sans", var(--font-sans), sans-serif;
+  --font-serif: "Google Sans", "Product Sans", var(--font-sans), sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback";
-  --font-lora: "var(--font-lora)", serif;
+  --font-lora: "Google Sans", "Product Sans", var(--font-sans), sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -137,7 +137,7 @@
   h2,
   h3,
   h4 {
-    @apply font-serif;
+    @apply font-sans;
   }
 }
 
@@ -152,20 +152,20 @@
   --card: #ffffff;
   --border: #e2e8f0;
 
-  font-family: var(--font-lora);
+  font-family: var(--font-sans);
 }
 
 .wellness-theme h1,
 .wellness-theme h2,
 .wellness-theme h3,
 .wellness-theme h4 {
-  @apply font-serif text-gray-900;
+  @apply font-sans text-gray-900;
 }
 
 .wellness-theme p,
 .wellness-theme span,
 .wellness-theme li {
-  @apply font-[var(--font-lora)];
+  @apply font-sans;
 }
 
 /* Custom scrollbar */

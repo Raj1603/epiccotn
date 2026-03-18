@@ -42,34 +42,33 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
 
           <nav className="flex-1 overflow-y-auto py-8 px-6 space-y-6">
             <Link
-              href="/"
-              className="block text-lg font-serif font-medium text-gray-900"
-              onClick={onClose}
-            >
-              Everyday Panty
-            </Link>
-
-            <Link
-              href="/#science"
-              className="block text-lg font-serif font-medium text-gray-900"
-              onClick={() => {
-                onClose();
-                document.getElementById('science')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              The Science
-            </Link>
-
-            <Link
               href="/#story"
-              className="block text-lg font-serif font-medium text-gray-900"
+              className="block text-lg font-sans font-medium text-gray-900"
               onClick={() => {
                 onClose();
                 document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Our Story
+              About Us
             </Link>
+
+            <Link
+              href="/contact"
+              className="block text-lg font-sans font-medium text-gray-900"
+              onClick={onClose}
+            >
+              Contact
+            </Link>
+
+            <button
+              className="block text-lg font-sans font-medium text-gray-900 text-left w-full"
+              onClick={() => {
+                onClose();
+                window.dispatchEvent(new CustomEvent('openCart'));
+              }}
+            >
+              Shop Now
+            </button>
 
             <div className="pt-6 border-t border-gray-100">
               <Link

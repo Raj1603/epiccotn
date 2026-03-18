@@ -26,7 +26,7 @@ export function Header({ notifications = [] }: HeaderProps) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300 wellness-theme" suppressHydrationWarning>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-gray-100/50 shadow-sm transition-all duration-500 wellness-theme" suppressHydrationWarning>
 
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6" suppressHydrationWarning>
           <div className="flex items-center justify-between h-20" suppressHydrationWarning>
@@ -35,40 +35,40 @@ export function Header({ notifications = [] }: HeaderProps) {
               <Menu className="h-6 w-6 text-gray-900" />
             </button>
 
-            <Link href="/" className="flex-shrink-0">
-              <span className="text-2xl font-serif font-bold text-gray-900 tracking-tight">
-                Epiccotn<span className="text-[var(--primary)]">™</span>
+            <Link href="/" className="flex-shrink-0 group">
+              <span className="text-2xl font-sans font-black text-gray-900 tracking-tighter group-hover:opacity-80 transition-opacity">
+                Epiccotn<span className="text-[var(--primary)] text-3xl leading-none">.</span>
               </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-10 h-full" suppressHydrationWarning>
-              <Link
-                href="/"
-                className="text-sm font-medium text-gray-700 hover:text-[var(--primary)] tracking-wide transition-colors"
-              >
-                Everyday Panty
-              </Link>
-              <Link
-                href="/#science"
-                className="text-sm font-medium text-gray-700 hover:text-[var(--primary)] tracking-wide transition-colors"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('science')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                The Science
-              </Link>
+            <nav className="hidden lg:flex items-center gap-12 h-full" suppressHydrationWarning>
               <Link
                 href="/#story"
-                className="text-sm font-medium text-gray-700 hover:text-[var(--primary)] tracking-wide transition-colors"
+                className="relative text-sm font-semibold text-gray-600 tracking-wider transition-colors hover:text-gray-900 group"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' });
+                  if (window.location.pathname === "/") {
+                    e.preventDefault();
+                    document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' });
+                  }
                 }}
               >
-                Our Story
+                About Us
+                <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-gray-900 transition-all duration-300 group-hover:w-full rounded-full"></span>
               </Link>
+              <Link
+                href="/contact"
+                className="relative text-sm font-semibold text-gray-600 tracking-wider transition-colors hover:text-gray-900 group"
+              >
+                Contact
+                <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-gray-900 transition-all duration-300 group-hover:w-full rounded-full"></span>
+              </Link>
+              <button
+                onClick={() => setCartOpen(true)}
+                className="text-xs font-bold tracking-[0.15em] px-6 py-3 bg-gray-900 text-white rounded-full shadow-lg hover:bg-black hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
+              >
+                SHOP NOW
+              </button>
             </nav>
 
             {/* Right actions */}
