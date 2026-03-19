@@ -138,7 +138,7 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                                 size="lg"
                                 onClick={handleAddToCart}
                                 disabled={isAdding}
-                                className="bg-gray-900 hover:bg-black text-white px-10 h-14 rounded-full flex-1 relative overflow-hidden group shadow-xl transition-all"
+                                className="bg-gray-900 hover:bg-black text-white font-medium tracking-wide px-10 h-14 rounded-full flex-1 relative overflow-hidden group shadow-lg transition-all"
                             >
                                 <AnimatePresence mode="wait">
                                     {isAdding ? (
@@ -174,8 +174,6 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                                 <span className="font-bold text-gray-900">4.9/5</span>
                                 <span className="underline cursor-pointer">320+ Reviews</span>
                             </div>
-                            <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                            <p>Ships next day</p>
                         </div>
                     </motion.div>
 
@@ -215,7 +213,7 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
             {/* Why: Problem/Solution Grid */}
             <section className="py-24 bg-[var(--background)]">
                 <div className="container mx-auto px-6 text-center mb-16">
-                    <motion.h2 {...fadeIn} className="text-4xl font-serif mb-4">Why Epiccotn?</motion.h2>
+                    <motion.h2 {...fadeIn} className="text-4xl font-serif mb-4 text-gray-900">Why Epiccotn?</motion.h2>
                     <motion.p {...fadeIn} className="text-gray-600 max-w-2xl mx-auto">Common pain points addressed with elegant functionality.</motion.p>
                 </div>
 
@@ -225,41 +223,75 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                             problem: "Limited Period Features",
                             solution: "Built-in Pad Holder",
                             icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />
+                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
+                            videoSrc: "/videos/product-demo.mp4",
+                            posterSrc: "/images/epiccotn/pad-holder-poster.png"
                         },
                         {
                             problem: "Poor Hygiene & Odor",
                             solution: "Antimicrobial Protection",
                             icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />
+                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
+                            videoSrc: "/videos/product-demo.mp4",
+                            posterSrc: "/images/epiccotn/antimicrobial-poster.png"
                         },
                         {
                             problem: "Visible Panty Lines (VPL)",
                             solution: "Invisible Seamless Fit",
                             icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />
+                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
+                            videoSrc: "/videos/product-demo.mp4",
+                            posterSrc: "/images/epiccotn/seamless-fit-poster.png"
                         },
                         {
                             problem: "Lack of Discreet Storage",
                             solution: "Hidden Front Pocket",
                             icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />
+                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
+                            videoSrc: "/videos/product-demo.mp4",
+                            posterSrc: "/images/epiccotn/hidden-pocket-poster.png"
                         }
                     ].map((item, i) => (
                         <motion.div
                             key={i}
                             whileHover={{ y: -5 }}
-                            className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full"
+                            className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden group"
                         >
-                            <div className="mb-6 flex justify-between items-start">
-                                <div className="bg-red-50 p-2 rounded-lg">{item.icon}</div>
-                                <div className="bg-green-50 p-2 rounded-lg">{item.solveIcon}</div>
+                            <div className="relative h-48 w-full bg-gray-50 flex items-center justify-center border-b border-gray-100 overflow-hidden">
+                                <Image
+                                    src={item.posterSrc}
+                                    alt={item.solution}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
+                                <video 
+                                    src={item.videoSrc} 
+                                    poster={item.posterSrc}
+                                    autoPlay 
+                                    loop 
+                                    muted 
+                                    playsInline 
+                                    className="absolute inset-0 w-full h-full object-cover z-20 transition-opacity duration-300 pointer-events-none opacity-0 data-[loaded=true]:opacity-100"
+                                    onLoadedData={(e) => {
+                                        e.currentTarget.setAttribute("data-loaded", "true");
+                                    }}
+                                />
+                                {/* Play icon overlay indicating Video Theme Area */}
+                                <div className="absolute top-4 right-4 z-30 bg-white/50 backdrop-blur-md rounded-full p-2 shadow-sm pointer-events-none">
+                                    <div className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></div>
+                                </div>
                             </div>
-                            <div className="flex-grow">
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Problem</div>
-                                <h3 className="text-lg font-medium text-gray-500 mb-4 line-through decoration-red-200">{item.problem}</h3>
-                                <div className="text-xs font-bold text-[var(--primary)] uppercase tracking-widest mb-1">Wellness Solution</div>
-                                <p className="text-xl font-serif text-gray-900">{item.solution}</p>
+                            <div className="p-8 flex-grow">
+                                <div className="mb-6 flex justify-between items-start">
+                                    <div className="bg-red-50 p-2 rounded-lg">{item.icon}</div>
+                                    <div className="bg-green-50 p-2 rounded-lg">{item.solveIcon}</div>
+                                </div>
+                                <div>
+                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Problem</div>
+                                    <h3 className="text-lg font-medium text-gray-500 mb-4 line-through decoration-red-200">{item.problem}</h3>
+                                    <div className="text-xs font-bold text-[var(--primary)] uppercase tracking-widest mb-1">Wellness Solution</div>
+                                    <p className="text-xl font-serif text-gray-900">{item.solution}</p>
+                                </div>
                             </div>
                         </motion.div>
                     ))}
@@ -319,23 +351,26 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                     
                     <div className="grid md:grid-cols-2 gap-16 items-center relative z-10 flex-row-reverse">
                         <motion.div
-                            {...staggeredFade}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ staggerChildren: 0.2 }}
                             className="order-2 md:order-1"
                         >
                             <span className="text-green-800 font-bold uppercase tracking-widest text-sm mb-4 block">Signature Material</span>
                             <h2 className="text-4xl md:text-5xl font-sans mb-8 text-gray-900 leading-tight">The Wisdom of Trees.</h2>
                             <p className="text-gray-800 text-xl mb-12 leading-relaxed font-light">
-                                Ethically sourced, incredibly soft. Our proprietary blend of <strong className="text-green-900 font-bold bg-white/50 px-2 rounded-md">Organic Bamboo</strong> and Lyocell is 3x more breathable than standard cotton and requires 80% less water to produce.
+                                Ethically sourced, incredibly soft. Our proprietary blend of <strong className="text-green-900 font-bold bg-white/80 px-2 py-1 rounded-md shadow-sm border border-green-100">Organic Bamboo</strong> and Lyocell is 3x more breathable than standard cotton and requires 80% less water to produce.
                             </p>
 
                             <div className="grid grid-cols-2 gap-6">
-                                <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
+                                <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
                                     <div className="bg-green-100 p-3 rounded-full mb-4">
                                         <Leaf className="text-green-700 w-6 h-6" />
                                     </div>
                                     <span className="text-gray-900 font-bold text-sm uppercase tracking-wide">Sustainable<br/>Sourcing</span>
                                 </div>
-                                <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
+                                <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
                                     <div className="bg-blue-50 p-3 rounded-full mb-4">
                                         <Wind className="text-blue-500 w-6 h-6" />
                                     </div>
@@ -349,13 +384,13 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
-                            className="relative h-[400px] md:h-[500px] order-1 md:order-2 w-full"
+                            className="relative h-[400px] md:h-[500px] order-1 md:order-2 w-full group"
                         >
                             <Image
                                 src="/images/epiccotn/pocket.png"
                                 alt="Epiccotn Bamboo Fabric Detail"
                                 fill
-                                className="object-cover rounded-[2rem] shadow-xl border-4 border-white"
+                                className="object-cover rounded-[2rem] shadow-xl border-4 border-white transition-transform duration-700 group-hover:scale-105"
                             />
                         </motion.div>
                     </div>
@@ -479,8 +514,7 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                         ))}
                     </div>
 
-                    <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-12 border-t border-gray-100 italic font-serif text-sm text-gray-400">
-                        <div className="text-center">Ships from: California</div>
+                    <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 pt-12 border-t border-gray-100 italic font-serif text-sm text-gray-400">
                         <div className="text-center">Eco-Friendly Packaging</div>
                         <div className="text-center">Ethically Manufactured</div>
                         <div className="text-center">Climate Neutral Cert.</div>
@@ -569,16 +603,16 @@ export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
                 </div>
             </section>
 
-            <section className="py-32 bg-[var(--primary)] text-white text-center">
+            <section className="py-32 bg-[var(--primary)] text-white text-center rounded-t-[4rem]">
                 <div className="container mx-auto px-6 max-w-3xl">
                     <motion.div {...fadeIn}>
-                        <h2 className="text-4xl md:text-5xl font-serif mb-8">Ready to transition to true comfort?</h2>
-                        <p className="text-xl mb-12 opacity-90">Experience the difference of scientific wellness. Your skin will thank you.</p>
+                        <h2 className="text-4xl md:text-5xl font-serif mb-8">Ready to rediscover comfort?</h2>
+                        <p className="text-xl mb-12 opacity-90 font-light text-[var(--primary-foreground)]">Experience the difference of scientific wellness firsthand.</p>
                         <Button
                             size="lg"
                             onClick={handleAddToCart}
                             disabled={isAdding}
-                            className="bg-white text-[var(--primary)] hover:bg-gray-100 px-12 py-8 text-xl rounded-full shadow-2xl transition-transform hover:scale-105 active:scale-95"
+                            className="bg-white text-[var(--primary)] hover:bg-gray-50 px-12 py-7 text-lg rounded-full shadow-xl font-medium transition-all hover:-translate-y-1 active:scale-95"
                         >
                             {isAdding ? "Adding..." : "Shop the Everyday Panty"}
                         </Button>

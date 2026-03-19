@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Instagram, Facebook, Youtube } from "lucide-react"
+import { Instagram, Facebook, Youtube, Leaf, Shield, MessageSquare } from "lucide-react"
 import { NewsletterForm } from "./newsletter-form"
 
 const footerLinks = {
@@ -23,8 +23,36 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer id="contact" className="bg-gradient-to-b from-gray-50 to-white border-t border-gray-100 wellness-theme relative overflow-hidden" suppressHydrationWarning>
-      <div className="absolute top-0 right-0 w-[60rem] h-[60rem] bg-[var(--primary)]/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+    <>
+      {/* 3-Column Trust Banner */}
+      <div className="bg-gray-50 pt-20 pb-12 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-gray-200">
+          <div className="pt-8 md:pt-0 flex flex-col items-center group">
+            <div className="bg-white p-4 rounded-full shadow-sm mb-4 group-hover:scale-110 transition-transform">
+              <Leaf className="w-6 h-6 text-green-700" />
+            </div>
+            <h4 className="font-serif text-lg mb-2 text-gray-900">Premium Fabric Innovation</h4>
+            <p className="text-gray-500 text-sm">Experience Breathable, Quality and Comfort</p>
+          </div>
+          <div className="pt-8 md:pt-0 flex flex-col items-center group">
+            <div className="bg-white p-4 rounded-full shadow-sm mb-4 group-hover:scale-110 transition-transform">
+              <Shield className="w-6 h-6 text-blue-700" />
+            </div>
+            <h4 className="font-serif text-lg mb-2 text-gray-900">Customer Satisfaction</h4>
+            <p className="text-gray-500 text-sm">Secure, Confident & Every Day</p>
+          </div>
+          <div className="pt-8 md:pt-0 flex flex-col items-center group">
+            <div className="bg-white p-4 rounded-full shadow-sm mb-4 group-hover:scale-110 transition-transform">
+              <MessageSquare className="w-6 h-6 text-pink-700" />
+            </div>
+            <h4 className="font-serif text-lg mb-2 text-gray-900">Get In Touch</h4>
+            <p className="text-gray-500 text-sm">Experience world class support</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer */}
+      <footer id="contact" className="bg-white text-gray-600 border-t border-gray-100 wellness-theme relative overflow-hidden" suppressHydrationWarning>
       
       <div className="max-w-7xl mx-auto px-6 py-24 lg:py-32 relative z-10" suppressHydrationWarning>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-16 lg:gap-20" suppressHydrationWarning>
@@ -104,6 +132,7 @@ export function Footer() {
         </div>
       </div>
     </footer>
+    </>
   )
 }
 

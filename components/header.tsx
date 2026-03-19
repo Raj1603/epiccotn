@@ -26,7 +26,7 @@ export function Header({ notifications = [] }: HeaderProps) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-gray-100/50 shadow-sm transition-all duration-500 wellness-theme" suppressHydrationWarning>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100/50 shadow-sm transition-all duration-500 wellness-theme" suppressHydrationWarning>
 
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6" suppressHydrationWarning>
           <div className="flex items-center justify-between h-20" suppressHydrationWarning>
@@ -65,7 +65,7 @@ export function Header({ notifications = [] }: HeaderProps) {
               </Link>
               <button
                 onClick={() => setCartOpen(true)}
-                className="text-xs font-bold tracking-[0.15em] px-6 py-3 bg-gray-900 text-white rounded-full shadow-lg hover:bg-black hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
+                className="text-xs font-bold tracking-[0.15em] px-8 py-3.5 bg-black text-white hover:bg-gray-900 transition-colors uppercase"
               >
                 SHOP NOW
               </button>

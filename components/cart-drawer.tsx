@@ -25,18 +25,6 @@ const FALLBACK_SUGGESTIONS = [
     image: "/images/epiccotn/hero.png",
     href: "/products/everyday-panty",
   },
-  {
-    name: "Cotton Essentials Pack",
-    subtitle: "Everyday • 3-Pack",
-    image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?q=80&w=800",
-    href: "#",
-  },
-  {
-    name: "Seamless Wellness Set",
-    subtitle: "Eco-Friendly • Bamboo Fiber",
-    image: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=800",
-    href: "#",
-  },
 ]
 
 export function CartDrawer({ open, onClose }: CartDrawerProps) {

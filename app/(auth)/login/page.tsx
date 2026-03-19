@@ -45,7 +45,6 @@ function LoginContent() {
             })
 
             if (error) {
-                console.error("Login error:", error)
                 setErrorMessage(error.message)
                 setLoading(false)
                 return
@@ -57,7 +56,6 @@ function LoginContent() {
                 router.push(next)
             }
         } catch (error: any) {
-            console.error("Unexpected error:", error)
             setErrorMessage(error?.message || "An unexpected error occurred")
             setLoading(false)
         }
@@ -66,7 +64,7 @@ function LoginContent() {
     return (
         <div suppressHydrationWarning className="min-h-screen grid lg:grid-cols-2">
             <div className="hidden lg:block relative bg-neutral-900">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1616410011236-7a42121dd981?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-50" />
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/hero.png')] bg-cover bg-center opacity-50" />
                 <div className="relative h-full flex items-center justify-center p-12">
                     <div className="text-white max-w-lg">
                         <h1 className="text-4xl font-bold mb-6">Welcome Back</h1>
