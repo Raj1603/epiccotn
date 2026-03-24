@@ -63,21 +63,22 @@ function LoginContent() {
 
     return (
         <div suppressHydrationWarning className="min-h-screen grid lg:grid-cols-2">
-            <div className="hidden lg:block relative bg-neutral-900">
-                <div className="absolute inset-0 bg-[url('/images/epiccotn/hero.png')] bg-cover bg-center opacity-50" />
-                <div className="relative h-full flex items-center justify-center p-12">
-                    <div className="text-white max-w-lg">
-                        <h1 className="text-4xl font-bold mb-6">Welcome Back</h1>
-                        <p className="text-lg text-white/80">Manage your orders, saved items, and account details.</p>
+            <div className="hidden lg:block relative bg-[#000]">
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/hero.png')] bg-cover bg-center opacity-70" />
+                <div className="absolute inset-0 bg-black/30" />
+                <div className="relative h-full flex items-center justify-center p-12 z-10">
+                    <div className="text-[#FFFFFF] max-w-lg">
+                        <h1 className="text-[clamp(40px,5vw,64px)] font-syne font-bold leading-[0.95] tracking-tight uppercase mb-6">Welcome Back</h1>
+                        <p className="text-lg text-[#FFFFFF]/80 font-light leading-relaxed font-inter">Manage your orders, saved items, and account details.</p>
                     </div>
                 </div>
             </div>
 
-            <div className="flex items-center justify-center p-8 bg-white">
+            <div className="flex items-center justify-center p-8 bg-background">
                 <div className="w-full max-w-md space-y-8">
                     <div className="text-center lg:text-left">
-                        <h2 className="text-3xl font-bold text-gray-900">Sign in</h2>
-                        <p className="mt-2 text-gray-600">Enter your details to access your account</p>
+                        <h2 className="text-3xl font-syne font-bold text-foreground uppercase tracking-tight">Sign in</h2>
+                        <p className="mt-4 text-foreground/60 font-inter font-light">Enter your details to access your account</p>
                     </div>
 
                     {/* Error Message Display */}
@@ -88,8 +89,8 @@ function LoginContent() {
                     )}
 
                     <form onSubmit={handleLogin} className="space-y-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                        <div className="space-y-3">
+                            <Label htmlFor="email" className="font-syne text-[11px] font-bold uppercase tracking-wider text-foreground/60">Email</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -97,13 +98,13 @@ function LoginContent() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="h-11"
+                                className="h-14 bg-transparent border-border rounded-none focus-visible:ring-lime text-foreground px-4 text-base"
                             />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                                <Label htmlFor="password">Password</Label>
-                                <Link href="/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+                                <Label htmlFor="password" className="font-syne text-[11px] font-bold uppercase tracking-wider text-foreground/60">Password</Label>
+                                <Link href="/forgot-password" className="font-syne text-[10px] font-bold uppercase tracking-wider text-lime hover:underline">
                                     Forgot password?
                                 </Link>
                             </div>
@@ -114,12 +115,12 @@ function LoginContent() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="h-11 pr-10"
+                                    className="h-14 bg-transparent border-border rounded-none focus-visible:ring-lime text-foreground px-4 text-base pr-12"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                                    className="absolute right-4 top-4 text-foreground/40 hover:text-foreground/80 transition-colors focus:outline-none"
                                 >
                                     {showPassword ? (
                                         <EyeOff className="h-5 w-5" />
@@ -130,15 +131,15 @@ function LoginContent() {
                             </div>
                         </div>
 
-                        <Button type="submit" className="w-full h-11 bg-neutral-900 hover:bg-neutral-800" disabled={loading}>
-                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                            Sign in
+                        <Button type="submit" className="w-full h-14 bg-lime hover:bg-lime-dk text-black rounded-none font-syne font-bold uppercase tracking-widest text-[13px] transition-all hover:-translate-y-[2px]" disabled={loading}>
+                            {loading ? <Loader2 className="mr-3 h-5 w-5 animate-spin" /> : null}
+                            Sign In
                         </Button>
                     </form>
 
-                    <div className="text-center text-sm">
-                        <span className="text-gray-600">Don't have an account? </span>
-                        <Link href={`/signup?next=${encodeURIComponent(next)}`} className="font-bold text-gray-900 hover:underline">
+                    <div className="text-center text-[13px] font-inter border-t border-border pt-8 mt-10">
+                        <span className="text-foreground/50">Don't have an account? </span>
+                        <Link href={`/signup?next=${encodeURIComponent(next)}`} className="font-bold text-foreground hover:text-lime transition-colors">
                             Sign up
                         </Link>
                     </div>

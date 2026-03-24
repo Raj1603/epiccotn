@@ -20,32 +20,33 @@ export function NewsletterForm() {
         setIsSubmitting(true)
 
         try {
-            // Attempt to insert into a newsletter table if it exists
             const { error } = await supabase
                 .from("newsletter_subscribers")
                 .insert([{ email }])
 
-            // Whether the table exists or not right now, we give the user a good experience
             if (error) {
+                console.error("Supabase Newsletter Error:", error)
                 if (error.code === "PGRST205") {
-                    // Table not found in PostgREST cache - ignore temporarily so UI works while cache refreshes
+                    // Table not found in cache - usually resolves after a moment
+                    toast.info("Setting things up, please try again in a moment.")
                 } else if (error.code === "23505") {
-                    // Unique constraint violation (already subscribed)
                     toast.success("You're already subscribed! Welcome back.")
                     setEmail("")
                     return
+                } else if (error.code === "42P01") {
+                    toast.error("Database table missing. Please run the newsletter SQL script.")
+                    return
                 } else {
-                    console.error("Supabase Subscribe Error:", JSON.stringify(error))
-                    toast.error("Something went wrong. Please try again later.")
+                    toast.error(`Something went wrong (Error ${error.code}). Please try again later.`)
                     return
                 }
+            } else {
+                toast.success("Welcome to the journey! You've successfully subscribed.")
+                setEmail("")
             }
-
-            toast.success("Welcome to the journey! You've successfully subscribed.")
-            setEmail("")
         } catch (err: any) {
-            console.error("Caught error:", err?.message || err)
-            toast.error("Something went wrong. Please try again later.")
+            console.error("Newsletter Catch Error:", err)
+            toast.error("Connection error. Please check your internet and try again.")
         } finally {
             setIsSubmitting(false)
         }

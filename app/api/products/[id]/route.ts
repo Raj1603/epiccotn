@@ -18,21 +18,21 @@ export async function GET(
 
         if (error) throw error
 
-        // Map to UI Product format
+        // Map to UI Product format with Admin Compatibility
         const mappedData = {
+            ...data, // Include all raw database fields (category_id, price, compare_at_price, images)
             id: data.id,
             name: data.name,
             slug: data.slug,
-            subtitle: data.description || '',
+            subtitle: data.description?.split('\n')[0] || '', // Guess subtitle from first line
             description: data.description || '',
-            price: data.price / 100,
-            originalPrice: data.compare_at_price ? data.compare_at_price / 100 : undefined,
-            image: data.images?.[0] || '',
-            hoverImage: data.images?.[1] || '',
-            gallery: data.images && data.images.length > 2 ? data.images.slice(2) : ["", "", "", "", ""],
+            price: data.price, // Return RAW for Admin to handle division
+            originalPrice: data.compare_at_price,
+            images: data.images || [],
             category: data.categories?.name || 'Uncategorized',
             categoryName: data.categories?.name || 'Uncategorized',
             categoryId: data.category_id,
+            category_id: data.category_id, // Duplicate for UI compatibility
             badge: data.badge || '',
             color_variants: data.color_variants || []
         }

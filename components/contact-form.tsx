@@ -65,20 +65,21 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-10 mb-16 w-full max-w-xl mx-auto">
-      <div className="relative">
+    <form onSubmit={handleSubmit} className="space-y-12 mb-16 w-full max-w-xl mx-auto">
+      <div className="relative group">
         <input 
           type="text" 
           id="name"
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Full Name"
-          className="w-full bg-transparent border-0 border-b border-gray-300 py-3 text-sm text-gray-900 placeholder:text-gray-500 focus:ring-0 focus:border-gray-900 focus:outline-none transition-colors"
+          placeholder="Your Name"
+          className="w-full bg-transparent border-0 border-b border-white/10 py-4 text-[14px] text-white placeholder:text-white/20 focus:ring-0 focus:border-lime focus:outline-none transition-all font-inter"
         />
+        <div className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-lime transition-all duration-500 group-hover:w-full select-none pointer-events-none" />
       </div>
 
-      <div className="relative">
+      <div className="relative group">
         <input 
           type="email" 
           id="email"
@@ -86,12 +87,13 @@ export function ContactForm() {
           required
           value={formData.email}
           onChange={handleChange}
-          placeholder="Email*"
-          className="w-full bg-transparent border-0 border-b border-gray-300 py-3 text-sm text-gray-900 placeholder:text-gray-500 focus:ring-0 focus:border-gray-900 focus:outline-none transition-colors"
+          placeholder="Email Address"
+          className="w-full bg-transparent border-0 border-b border-white/10 py-4 text-[14px] text-white placeholder:text-white/20 focus:ring-0 focus:border-lime focus:outline-none transition-all font-inter"
         />
+        <div className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-lime transition-all duration-500 group-hover:w-full select-none pointer-events-none" />
       </div>
 
-      <div className="relative">
+      <div className="relative group">
         <textarea 
           id="message"
           name="message"
@@ -99,23 +101,29 @@ export function ContactForm() {
           rows={4}
           value={formData.message}
           onChange={handleChange}
-          placeholder="Message*"
-          className="w-full bg-transparent border-0 border-b border-gray-300 py-3 text-sm text-gray-900 placeholder:text-gray-500 focus:ring-0 focus:border-gray-900 focus:outline-none transition-colors resize-none"
+          placeholder="How can we help you?"
+          className="w-full bg-transparent border-0 border-b border-white/10 py-4 text-[14px] text-white placeholder:text-white/20 focus:ring-0 focus:border-lime focus:outline-none transition-all resize-none font-inter"
         ></textarea>
+        <div className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-lime transition-all duration-500 group-hover:w-full select-none pointer-events-none" />
       </div>
 
-      <div className="pt-4">
+      <div className="pt-6">
         <button 
           type="submit" 
           disabled={isSubmitting}
-          className="w-full bg-gray-900 text-white py-4 text-xs font-bold tracking-[0.2em] hover:bg-black transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full bg-lime text-black py-5 font-syne text-[13px] font-bold tracking-[0.15em] uppercase hover:bg-lime-dk transition-all hover:translate-y-[-2px] active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-3"
         >
-          {isSubmitting ? "SENDING..." : "SEND"}
+          {isSubmitting ? "TRANSMITTING..." : (
+            <>
+              DISPATCH MESSAGE
+              <span className="text-[18px] group-hover:translate-x-1 transition-transform">→</span>
+            </>
+          )}
         </button>
         
-        <p className="text-[10px] text-gray-400 mt-4 leading-relaxed text-center">
-          Fields indicated with an asterisk (*) are required.<br />
-          By submitting this form, you agree to our Privacy Policy and Terms of Service.
+        <p className="font-inter text-[10px] text-white/20 mt-6 leading-relaxed text-center uppercase tracking-wider">
+          Secured with end-to-end encryption.<br />
+          By dispatching, you acknowledge our <strong className="text-white/40">Privacy Framework</strong>.
         </p>
       </div>
     </form>

@@ -54,7 +54,7 @@ export function ProductDetail({ product, isAdmin }: ProductDetailProps) {
   }
 
   const handleAddToCart = () => {
-    addItem(product, 1, product.colorVariants?.[0]?.name)
+    addItem(product, 1, product.colorVariants?.[0]?.name, selectedVariant)
     window.dispatchEvent(new CustomEvent('openCart'))
     toast.success("Added to cart!")
   }
@@ -87,7 +87,7 @@ export function ProductDetail({ product, isAdmin }: ProductDetailProps) {
                 priority={idx === 0}
               />
               {idx === 0 && product.badge && (
-                <div className="absolute top-6 left-6 px-4 py-1.5 bg-neutral-900 text-white rounded-full text-xs font-bold tracking-widest uppercase z-10">
+                <div className="absolute top-6 left-6 px-4 py-1.5 bg-neutral-900 text-white rounded-full text-xs font-bold tracking-wider uppercase z-10">
                   {product.badge === "SAVE" && product.savePercent
                     ? `Save ${product.savePercent}%`
                     : product.badge?.replace("_", " ")}
@@ -115,8 +115,8 @@ export function ProductDetail({ product, isAdmin }: ProductDetailProps) {
                   </Button>
                 </div>
               )}
-              <div className="text-sm font-semibold text-neutral-500 uppercase tracking-widest">{product.brand}</div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 font-serif leading-tight">{product.name}</h1>
+              <div className="text-sm font-semibold text-neutral-500 uppercase tracking-wider">{product.brand}</div>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 font-sans leading-tight">{product.name}</h1>
               <p className="text-lg text-gray-500 font-sans tracking-wide">{product.subtitle}</p>
 
               {/* Price */}

@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Plus, X } from "lucide-react"
+import { ArrowLeft, Plus, X, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 interface ColorVariant {
     name: string
@@ -49,8 +50,29 @@ export default function AddProductPage() {
         try {
             const response = await fetch("/api/categories")
             const data = await response.json()
-            console.log("Loaded categories for dropdown:", data)
-            setCategoriesList(data)
+            
+            // Cleanse the data from placeholder template legacy (Nomad Goods artifacts)
+            const cleanData = data.filter((cat: any) => {
+                const name = cat.name.toLowerCase()
+                return !name.includes('apple') && 
+                       !name.includes('watch') && 
+                       !name.includes('cases') && 
+                       !name.includes('charging') && 
+                       !name.includes('wallets') &&
+                       !name.includes('passport') &&
+                       !name.includes('gear')
+            })
+
+            // If we have no clean data, seed with Epiccotn DNA defaults for the UI
+            if (cleanData.length === 0) {
+                setCategoriesList([
+                    { id: 'bamboo', name: 'Bamboo Series', slug: 'bamboo' },
+                    { id: 'pima', name: 'Pima Silk Blend', slug: 'pima' },
+                    { id: 'seamless', name: 'Signature Seamless', slug: 'seamless' }
+                ])
+            } else {
+                setCategoriesList(cleanData)
+            }
         } catch (error) {
             console.error("Failed to load categories")
         }
@@ -151,246 +173,192 @@ export default function AddProductPage() {
     }
 
     return (
-        <div>
+        <div className="space-y-10 animate-in fade-in duration-700 pb-20" suppressHydrationWarning>
             {/* Header */}
-            <div className="mb-8">
-                <Link href="/admin/products" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Products
+            <div className="flex flex-col gap-4">
+                <Link href="/admin/products" className="inline-flex items-center text-[10px] font-bold font-syne uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors">
+                    <ArrowLeft className="h-3 w-3 mr-2" />
+                    Style Catalog
                 </Link>
-                <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
-
-                {error && (
-                    <div className="mt-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-                        {error}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <h1 className="text-4xl font-extrabold text-foreground font-syne uppercase tracking-tight">New Product Style</h1>
+                        <p className="text-muted-foreground font-medium text-sm mt-2 font-inter">Define the DNA of a new Epiccotn collection piece.</p>
                     </div>
-                )}
+                    {error && (
+                        <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-[10px] font-bold font-syne uppercase tracking-widest animate-bounce">
+                            Error: {error}
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-                <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Main Form */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Basic Information */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <Label htmlFor="name">Product Name *</Label>
-                                    <Input
-                                        id="name"
-                                        value={formData.name}
-                                        onChange={(e) => handleInputChange("name", e.target.value)}
-                                        placeholder="Modern Leather Case"
-                                        required
-                                    />
+            <form onSubmit={handleSubmit} className="relative">
+                <div className="grid lg:grid-cols-12 gap-10">
+                    {/* Main Content Hub */}
+                    <div className="lg:col-span-8 space-y-10">
+                        
+                        {/* 1. Identity Segment */}
+                        <div className="bg-card border border-border p-10 shadow-sm relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <Plus className="w-20 h-20" strokeWidth={5} />
+                            </div>
+                            
+                            <h2 className="text-xs font-bold font-syne uppercase tracking-[0.3em] text-muted-foreground border-l-2 border-primary pl-4 mb-10">
+                                Product Identity
+                            </h2>
+                            
+                            <div className="space-y-8">
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    <div className="space-y-2">
+                                        <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Style Name *</Label>
+                                        <Input
+                                            value={formData.name}
+                                            onChange={(e) => handleInputChange("name", e.target.value)}
+                                            placeholder="The Cloud Seamless Bikini"
+                                            className="h-14 bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none text-lg font-bold"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label className={cn("text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground", slugConflict && "text-red-500")}>URL Identifier (Slug)</Label>
+                                        <Input
+                                            value={formData.slug}
+                                            onChange={(e) => handleInputChange("slug", e.target.value)}
+                                            placeholder="cloud-seamless-bikini"
+                                            className={cn(
+                                                "h-14 bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none",
+                                                slugConflict && "border-red-500 text-red-500"
+                                            )}
+                                        />
+                                        {slugConflict && <p className="text-[9px] text-red-500 font-bold uppercase tracking-widest">Identifier already in use</p>}
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="slug" className={slugConflict ? "text-red-500" : ""}>Slug</Label>
+                                <div className="space-y-2">
+                                    <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Core Subtitle</Label>
                                     <Input
-                                        id="slug"
-                                        value={formData.slug}
-                                        onChange={(e) => handleInputChange("slug", e.target.value)}
-                                        placeholder="modern-leather-case"
-                                        className={slugConflict ? "border-red-500 focus:ring-red-500" : ""}
-                                    />
-                                    {slugConflict ? (
-                                        <p className="text-xs text-red-500 mt-1 font-medium underline animate-pulse">
-                                            This slug is already taken. Please slightly change the name or slug above.
-                                        </p>
-                                    ) : (
-                                        <p className="text-xs text-gray-500 mt-1">
-                                            {manualSlug ? "Manually edited" : "Auto-generated from name"}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="subtitle">Subtitle</Label>
-                                    <Input
-                                        id="subtitle"
                                         value={formData.subtitle}
                                         onChange={(e) => handleInputChange("subtitle", e.target.value)}
-                                        placeholder="iPhone 16 Pro Max | Horween®"
+                                        placeholder="70% Bamboo / Premium Comfort Series"
+                                        className="h-14 bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none"
                                     />
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="description">Description</Label>
+                                <div className="space-y-2">
+                                    <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Detailed Description</Label>
                                     <Textarea
-                                        id="description"
                                         value={formData.description}
                                         onChange={(e) => handleInputChange("description", e.target.value)}
-                                        placeholder="Product description..."
-                                        rows={4}
+                                        placeholder="Elaborate on the craftsmanship and wearability..."
+                                        rows={6}
+                                        className="bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none p-6 leading-relaxed"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Pricing */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Pricing</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="price">Price (USD) *</Label>
-                                    <Input
-                                        id="price"
-                                        type="number"
-                                        step="0.01"
-                                        value={formData.price}
-                                        onChange={(e) => handleInputChange("price", e.target.value)}
-                                        placeholder="59.99"
-                                        required
-                                    />
+                        {/* 2. Value & Economics */}
+                        <div className="bg-card border border-border p-10 shadow-sm">
+                            <h2 className="text-xs font-bold font-syne uppercase tracking-[0.3em] text-muted-foreground border-l-2 border-primary pl-4 mb-10">
+                                Pricing & Values
+                            </h2>
+                            <div className="grid md:grid-cols-2 gap-8">
+                                <div className="space-y-2">
+                                    <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Selling Price (USD) *</Label>
+                                    <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/30 font-bold">$</span>
+                                        <Input
+                                            type="number"
+                                            step="0.01"
+                                            value={formData.price}
+                                            onChange={(e) => handleInputChange("price", e.target.value)}
+                                            placeholder="49.00"
+                                            className="h-14 pl-10 bg-background border-border text-foreground font-syne font-black text-xl focus:border-primary/50 focus:ring-0 rounded-none"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                                <div>
-                                    <Label htmlFor="originalPrice">Original Price (optional)</Label>
-                                    <Input
-                                        id="originalPrice"
-                                        type="number"
-                                        step="0.01"
-                                        value={formData.originalPrice}
-                                        onChange={(e) => handleInputChange("originalPrice", e.target.value)}
-                                        placeholder="79.99"
-                                    />
+                                <div className="space-y-2">
+                                    <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Comparison Price (Optional)</Label>
+                                    <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/30 font-bold">$</span>
+                                        <Input
+                                            type="number"
+                                            step="0.01"
+                                            value={formData.originalPrice}
+                                            onChange={(e) => handleInputChange("originalPrice", e.target.value)}
+                                            placeholder="69.00"
+                                            className="h-14 pl-10 bg-background border-border text-muted-foreground font-syne font-bold focus:border-border/50 focus:ring-0 rounded-none"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Images */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Product Images</h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <Label htmlFor="image">Main Image URL</Label>
+                        {/* 3. Media Hub */}
+                        <div className="bg-card border border-border p-10 shadow-sm">
+                            <h2 className="text-xs font-bold font-syne uppercase tracking-[0.3em] text-muted-foreground border-l-2 border-primary pl-4 mb-2">
+                                Visual Assets
+                            </h2>
+                            <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mb-10">Use high-resolution vertical photography (4:5 ratio recommended).</p>
+                            
+                            <div className="grid md:grid-cols-2 gap-8 mb-10">
+                                <div className="space-y-4">
+                                    <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Master Image URL</Label>
                                     <Input
-                                        id="image"
                                         value={formData.image}
                                         onChange={(e) => handleInputChange("image", e.target.value)}
-                                        placeholder="/images/product-main.jpg"
+                                        placeholder="/images/products/main.jpg"
+                                        className="h-14 bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none"
                                     />
+                                    {formData.image && (
+                                        <div className="h-40 bg-muted border border-border relative overflow-hidden group/img">
+                                            <img src={formData.image} className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700" />
+                                        </div>
+                                    )}
                                 </div>
-                                <div>
-                                    <Label htmlFor="hoverImage">Hover Image URL (optional)</Label>
+                                <div className="space-y-4">
+                                    <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Interaction Hover URL</Label>
                                     <Input
-                                        id="hoverImage"
                                         value={formData.hoverImage}
                                         onChange={(e) => handleInputChange("hoverImage", e.target.value)}
-                                        placeholder="/images/product-hover.jpg"
+                                        placeholder="/images/products/hover.jpg"
+                                        className="h-14 bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none"
                                     />
+                                    {formData.hoverImage && (
+                                        <div className="h-40 bg-muted border border-border relative overflow-hidden group/img">
+                                            <img src={formData.hoverImage} className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700" />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Image Gallery */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional Gallery Images (Infographics, etc.)</h2>
-                            <p className="text-sm text-gray-500 mb-4">Add up to 7+ images total for a premium vertical stack.</p>
-                            <div className="space-y-3">
-                                {formData.gallery.map((url, idx) => (
-                                    <div key={idx} className="flex gap-2">
-                                        <Input
-                                            value={url}
-                                            onChange={(e) => {
-                                                const newGallery = [...formData.gallery]
-                                                newGallery[idx] = e.target.value
-                                                setFormData({ ...formData, gallery: newGallery })
-                                            }}
-                                            placeholder={`Gallery Image ${idx + 1} URL`}
-                                        />
-                                        {idx === formData.gallery.length - 1 && (
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => setFormData({ ...formData, gallery: [...formData.gallery, ""] })}
-                                            >
-                                                <Plus className="h-4 w-4" />
-                                            </Button>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Color Variants */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Color Variants</h2>
-
-                            {/* Existing Variants */}
-                            {colorVariants.length > 0 && (
-                                <div className="mb-6 space-y-3">
-                                    {colorVariants.map((variant, index) => (
-                                        <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                                            <div className="w-8 h-8 rounded-full border-2 border-gray-300" style={{ backgroundColor: variant.hex }} />
-                                            <div className="flex-1">
-                                                <p className="font-medium text-sm">{variant.name}</p>
-                                                <p className="text-xs text-gray-500">{variant.images.length} image(s)</p>
-                                            </div>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => removeColorVariant(index)}
-                                                className="text-red-600 hover:text-red-700"
-                                            >
-                                                <X className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Add New Variant */}
-                            <div className="space-y-4 p-4 border-2 border-dashed border-gray-200 rounded-lg">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <Label>Color Name</Label>
-                                        <Input
-                                            value={currentColor.name}
-                                            onChange={(e) => setCurrentColor({ ...currentColor, name: e.target.value })}
-                                            placeholder="Black"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label>Color Hex</Label>
-                                        <div className="flex gap-2">
+                            <div className="space-y-4">
+                                <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                                    Additional Portfolio Stack
+                                    <span className="text-[8px] text-primary">High-End Vertical Stack</span>
+                                </Label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {formData.gallery.map((url, idx) => (
+                                        <div key={idx} className="relative group/field">
                                             <Input
-                                                type="color"
-                                                value={currentColor.hex}
-                                                onChange={(e) => setCurrentColor({ ...currentColor, hex: e.target.value })}
-                                                className="w-16"
-                                            />
-                                            <Input
-                                                value={currentColor.hex}
-                                                onChange={(e) => setCurrentColor({ ...currentColor, hex: e.target.value })}
-                                                placeholder="#000000"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <Label>Image URLs</Label>
-                                    {currentColor.images.map((img, idx) => (
-                                        <div key={idx} className="flex gap-2 mb-2">
-                                            <Input
-                                                value={img}
+                                                value={url}
                                                 onChange={(e) => {
-                                                    const newImages = [...currentColor.images]
-                                                    newImages[idx] = e.target.value
-                                                    setCurrentColor({ ...currentColor, images: newImages })
+                                                    const newGallery = [...formData.gallery]
+                                                    newGallery[idx] = e.target.value
+                                                    setFormData({ ...formData, gallery: newGallery })
                                                 }}
-                                                placeholder="/images/product-black-1.jpg"
+                                                placeholder={`Perspective ${idx + 1}`}
+                                                className="h-14 bg-background border-border text-foreground font-inter focus:border-primary/50 focus:ring-0 rounded-none pr-10"
                                             />
-                                            {idx === currentColor.images.length - 1 && (
+                                            {idx === formData.gallery.length - 1 && (
                                                 <Button
                                                     type="button"
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => setCurrentColor({ ...currentColor, images: [...currentColor.images, ""] })}
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => setFormData({ ...formData, gallery: [...formData.gallery, ""] })}
+                                                    className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-primary hover:bg-primary/10 rounded-none"
                                                 >
                                                     <Plus className="h-4 w-4" />
                                                 </Button>
@@ -398,78 +366,162 @@ export default function AddProductPage() {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                        </div>
 
-                                <Button type="button" variant="outline" onClick={addColorVariant} className="w-full">
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    Add Color Variant
-                                </Button>
+                        {/* 4. Color DNA */}
+                        <div className="bg-card border border-border p-10 shadow-sm">
+                            <h2 className="text-xs font-bold font-syne uppercase tracking-[0.3em] text-muted-foreground border-l-2 border-primary pl-4 mb-2">
+                                Shade Palette
+                            </h2>
+                            <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mb-10">Add unique color variants for this product style.</p>
+
+                            <div className="grid md:grid-cols-2 gap-10">
+                                {/* Form to add */}
+                                <div className="space-y-6 p-6 border border-dashed border-border group-hover:border-primary/30 transition-colors">
+                                    <div className="space-y-2">
+                                        <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Color Nomenclature</Label>
+                                        <Input
+                                            value={currentColor.name}
+                                            onChange={(e) => setCurrentColor({ ...currentColor, name: e.target.value })}
+                                            placeholder="Midnight Jet"
+                                            className="h-12 bg-background border-border text-foreground font-syne uppercase font-bold text-xs focus:ring-0 rounded-none"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Hex Signature</Label>
+                                        <div className="flex gap-4">
+                                            <Input
+                                                type="color"
+                                                value={currentColor.hex}
+                                                onChange={(e) => setCurrentColor({ ...currentColor, hex: e.target.value })}
+                                                className="w-12 h-12 p-0 border-none cursor-pointer rounded-none"
+                                            />
+                                            <Input
+                                                value={currentColor.hex}
+                                                onChange={(e) => setCurrentColor({ ...currentColor, hex: e.target.value })}
+                                                placeholder="#000000"
+                                                className="flex-1 h-12 bg-background border-border text-foreground font-syne font-bold text-sm focus:ring-0 rounded-none"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Shade Image</Label>
+                                        <div className="flex gap-2">
+                                            <Input
+                                                value={currentColor.images[0]}
+                                                onChange={(e) => setCurrentColor({ ...currentColor, images: [e.target.value] })}
+                                                placeholder="/images/color/variant.jpg"
+                                                className="h-12 bg-background border-border text-foreground font-inter text-xs focus:ring-0 rounded-none"
+                                            />
+                                            <Button type="button" variant="outline" onClick={addColorVariant} className="h-12 w-12 border-primary text-primary hover:bg-primary hover:text-white rounded-none">
+                                                <Plus className="h-5 w-5" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* List of added */}
+                                <div className="space-y-4">
+                                    {colorVariants.length === 0 ? (
+                                        <div className="h-full border border-border bg-muted/20 flex flex-col items-center justify-center p-10 opacity-30 italic text-[11px] font-syne uppercase tracking-widest">
+                                            No variants specified
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {colorVariants.map((variant, idx) => (
+                                                <div key={idx} className="bg-background border border-border p-4 relative group/v">
+                                                    <div className="w-6 h-6 rounded-none border border-border mb-3" style={{ backgroundColor: variant.hex }} />
+                                                    <p className="text-[10px] font-syne font-black text-foreground uppercase tracking-tight truncate">{variant.name}</p>
+                                                    <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">{variant.hex}</p>
+                                                    <button 
+                                                        onClick={(e) => { e.preventDefault(); removeColorVariant(idx); }}
+                                                        className="absolute top-2 right-2 opacity-0 group-hover/v:opacity-100 text-red-500 transition-opacity"
+                                                    >
+                                                        <X className="h-3 w-3" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Sidebar */}
-                    <div className="space-y-6">
-                        {/* Category & Status */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Category & Status</h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <Label htmlFor="category_id">Category *</Label>
+                    {/* Operational Sidebar */}
+                    <div className="lg:col-span-4 space-y-8">
+                        {/* Status & Categorization */}
+                        <div className="bg-card border border-border p-8 shadow-sm space-y-8 sticky top-10">
+                            <h2 className="text-xs font-bold font-syne uppercase tracking-[0.3em] text-muted-foreground border-l-2 border-primary pl-4">
+                                Logistics Hub
+                            </h2>
+
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Primary Collection *</Label>
+                                <div className="relative">
                                     <select
-                                        id="category_id"
                                         value={formData.category_id}
                                         onChange={(e) => {
-                                            if (e.target.value === "ADD_NEW") {
-                                                router.push("/admin/categories/add")
-                                            } else {
-                                                handleInputChange("category_id", e.target.value)
-                                            }
+                                            if (e.target.value === "ADD_NEW") router.push("/admin/categories/add")
+                                            else handleInputChange("category_id", e.target.value)
                                         }}
-                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                        className="w-full h-14 bg-background border border-border text-foreground font-bold font-syne uppercase text-[11px] px-6 rounded-none appearance-none focus:border-primary/50 outline-none cursor-pointer"
                                         required
                                     >
-                                        <option value="">Select category</option>
-                                        <option value="ADD_NEW" className="font-bold text-blue-600">+ Add New Category</option>
+                                        <option value="">Select Collection</option>
                                         {categoriesList.map(cat => (
                                             <option key={cat.id} value={cat.id}>{cat.name}</option>
                                         ))}
+                                        <option value="ADD_NEW" className="text-primary font-black">+ Create New</option>
                                     </select>
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="badge">Badge/Label</Label>
-                                    <select
-                                        id="badge"
-                                        value={formData.badge}
-                                        onChange={(e) => handleInputChange("badge", e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                                    >
-                                        <option value="">None</option>
-                                        <option value="NEW">New</option>
-                                        <option value="TOP SELLER">Top Seller</option>
-                                        <option value="SAVE">Save</option>
-                                        <option value="HOT">Hot</option>
-                                        <option value="LIMITED EDITION">Limited Edition</option>
-                                    </select>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <Plus className="w-3 h-3 text-muted-foreground/30" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Actions */}
-                        <div className="bg-white rounded-lg shadow-sm p-6">
-                            <div className="space-y-3">
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-bold font-syne uppercase tracking-widest text-muted-foreground">Market Status Badge</Label>
+                                <select
+                                    value={formData.badge}
+                                    onChange={(e) => handleInputChange("badge", e.target.value)}
+                                    className="w-full h-14 bg-background border border-border text-foreground font-bold font-syne uppercase text-[11px] px-6 rounded-none appearance-none focus:border-primary/50 outline-none cursor-pointer"
+                                >
+                                    <option value="">None / Standard</option>
+                                    <option value="NEW">New Release</option>
+                                    <option value="TOP SELLER">Most In-Demand</option>
+                                    <option value="SAVE">Limited Offer</option>
+                                    <option value="HOT">Trending Now</option>
+                                    <option value="LIMITED EDITION">Bespoke Release</option>
+                                </select>
+                            </div>
+
+                            <div className="pt-8 border-t border-border mt-10 space-y-4">
                                 <Button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-gray-900 hover:bg-gray-800"
+                                    className="w-full h-18 bg-primary text-primary-foreground hover:bg-black hover:text-white transition-all duration-300 font-syne font-black uppercase tracking-[0.2em] rounded-none text-sm shadow-[0_10px_30px_rgba(148,182,39,0.2)] active:scale-[0.98]"
                                 >
-                                    {loading ? "Creating..." : "Create Product"}
+                                    {loading ? (
+                                        <div className="flex items-center gap-3">
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            <span>Transmitting Style...</span>
+                                        </div>
+                                    ) : (
+                                        "Launch This Style"
+                                    )}
                                 </Button>
-                                <Link href="/admin/products" className="block">
-                                    <Button type="button" variant="outline" className="w-full">
-                                        Cancel
+                                <Link href="/admin/products" className="block outline-none">
+                                    <Button type="button" variant="ghost" className="w-full h-14 border border-border text-muted-foreground hover:text-foreground font-syne font-bold uppercase tracking-widest rounded-none text-[10px]">
+                                        Discard Draft
                                     </Button>
                                 </Link>
+                            </div>
+
+                            <div className="flex items-center gap-4 p-4 bg-muted/30 border border-border border-dashed">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Catalog Auto-Sync Active</span>
                             </div>
                         </div>
                     </div>

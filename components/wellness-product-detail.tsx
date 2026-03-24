@@ -1,624 +1,360 @@
 "use client"
 
 import React, { useState } from "react"
-import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Check, X, Droplets, Shield, Leaf, Wind, ShoppingCart, Star } from "lucide-react"
-import { useCart } from "@/hooks/use-cart"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Droplets, Wind, Shield, Plus, Circle, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-interface WellnessProductDetailProps {
-    product: {
-        id: string
-        name: string
-        price: number
-        description?: string
-    }
-}
+export function WellnessProductDetail() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
-const COLORS = [
-    { name: "Lavender", value: "#d4a5d4", class: "bg-[#d4a5d4]" },
-    { name: "Sage Green", value: "#c5d8c5", class: "bg-[#c5d8c5]" },
-    { name: "Silk White", value: "#ffffff", class: "bg-white border border-gray-200" },
-]
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index)
+  }
 
-const SIZES = ["XS", "S", "M", "L", "XL"]
+  return (
+    <div className="bg-black text-white selection:bg-lime selection:text-black">
+      
+      {/* ═══ STATS BAR ═══ */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 border-b border-border">
+        {[
+          { num: "100", unit: "%", label: "Organic Bamboo" },
+          { num: "04", unit: "Lyr", label: "ProTech shield" },
+          { num: "35", unit: "ml", label: "Max Absorbency" },
+          { num: "150", unit: "+", label: "Pads replaced per year" },
+        ].map((stat, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.7 }}
+            className="p-9 lg:px-10 border-r border-b lg:border-b-0 border-border flex flex-col gap-2 hover:bg-lime/5 transition-colors"
+          >
+            <div className="flex items-baseline gap-1">
+              <span className="font-syne font-bold text-[40px] font-normal text-white leading-none">{stat.num}</span>
+              <span className="font-syne font-bold text-[18px] text-lime leading-none">{stat.unit}</span>
+            </div>
+            <span className="font-inter text-[12px] text-text-dim tracking-[0.02em]">{stat.label}</span>
+          </motion.div>
+        ))}
+      </div>
 
-export function WellnessProductDetail({ product }: WellnessProductDetailProps) {
-    const cart = useCart()
-    const [selectedColor, setSelectedColor] = useState(COLORS[0])
-    const [selectedSize, setSelectedSize] = useState("M")
-    const [isAdding, setIsAdding] = useState(false)
+      {/* ═══ WHY BAMBOO ═══ */}
+      <section className="py-[100px] px-6 lg:px-16 border-b border-border" id="whySwitch">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex flex-col lg:flex-row justify-between items-end mb-16 gap-8">
+            <motion.div initial={{ opacity: 0, x: -32 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+              <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Why switch</p>
+              <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">Why Switch to<br/>Bamboo Fabric?</h2>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 32 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="lg:text-right">
+              <p className="font-inter text-[15px] font-light leading-[1.75] text-text-mid max-w-[480px]">
+                Skin-loving fabric, hypoallergenic and chemical-free. Every fibre engineered to work harder than what you&apos;re wearing now.
+              </p>
+            </motion.div>
+          </div>
 
-    const handleAddToCart = () => {
-        setIsAdding(true)
-        cart.addItem({
-            ...product,
-            slug: "everyday-panty",
-            subtitle: "Natural Wisdom & Modern Science",
-            category: "Wellness",
-            categorySlug: "wellness",
-            brand: "Epiccotn",
-            image: "/images/epiccotn/hero.png",
-        }, 1, `${selectedColor.name} / ${selectedSize}`)
-
-        setTimeout(() => {
-            setIsAdding(false)
-            window.dispatchEvent(new CustomEvent('openCart'))
-        }, 800)
-    }
-
-    const fadeIn = {
-        initial: { opacity: 0, y: 20 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true },
-        transition: { duration: 0.6 }
-    }
-
-    const staggeredFade = {
-        initial: { opacity: 0, y: 20 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true },
-        transition: { staggerChildren: 0.2 }
-    }
-
-    const childFade = {
-        initial: { opacity: 0, y: 20 },
-        whileInView: { opacity: 1, y: 0 }
-    }
-
-    return (
-        <div className="wellness-theme min-h-screen">
-            {/* Hero & Purchase Section */}
-            <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[var(--background)] py-20 lg:py-0">
-                <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="z-10"
-                    >
-                        <span className="text-[var(--primary)] font-medium tracking-widest uppercase text-sm mb-4 block">
-                            Innovation in Intimacy
-                        </span>
-                        <h1 className="text-5xl md:text-7xl font-serif text-gray-900 leading-tight mb-6">
-                            Rediscover Your <br />
-                            <span className="italic text-[var(--primary)]">Comfort</span>
-                        </h1>
-
-                        <div className="space-y-8 mb-10">
-                            {/* Color Selection */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-4 block">Color: {selectedColor.name}</label>
-                                <div className="flex gap-4">
-                                    {COLORS.map((color) => (
-                                        <button
-                                            key={color.name}
-                                            onClick={() => setSelectedColor(color)}
-                                            className={cn(
-                                                "w-10 h-10 rounded-full transition-all duration-300 relative",
-                                                color.class,
-                                                selectedColor.name === color.name ? "ring-2 ring-[var(--primary)] ring-offset-4 scale-110" : "hover:scale-105"
-                                            )}
-                                            aria-label={color.name}
-                                        >
-                                            {selectedColor.name === color.name && (
-                                                <Check className={cn("absolute inset-0 m-auto w-4 h-4", color.name === 'Silk White' ? "text-gray-900" : "text-white")} />
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Size Selection */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-4 block">Size: {selectedSize}</label>
-                                <div className="flex flex-wrap gap-3">
-                                    {SIZES.map((size) => (
-                                        <button
-                                            key={size}
-                                            onClick={() => setSelectedSize(size)}
-                                            className={cn(
-                                                "w-14 h-12 rounded-xl border flex items-center justify-center text-sm font-medium transition-all duration-300",
-                                                selectedSize === size
-                                                    ? "bg-gray-900 text-white border-gray-900 shadow-lg"
-                                                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-900"
-                                            )}
-                                        >
-                                            {size}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row gap-4 max-w-md">
-                            <Button
-                                size="lg"
-                                onClick={handleAddToCart}
-                                disabled={isAdding}
-                                className="bg-gray-900 hover:bg-black text-white font-medium tracking-wide px-10 h-14 rounded-full flex-1 relative overflow-hidden group shadow-lg transition-all"
-                            >
-                                <AnimatePresence mode="wait">
-                                    {isAdding ? (
-                                        <motion.div
-                                            key="adding"
-                                            initial={{ y: 20, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            exit={{ y: -20, opacity: 0 }}
-                                            className="flex items-center gap-2"
-                                        >
-                                            <ShoppingCart className="w-5 h-5 animate-bounce" />
-                                            Adding...
-                                        </motion.div>
-                                    ) : (
-                                        <motion.div
-                                            key="idle"
-                                            initial={{ y: 20, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            exit={{ y: -20, opacity: 0 }}
-                                            className="flex items-center justify-between w-full"
-                                        >
-                                            <span>Add to Cart</span>
-                                            <span className="opacity-60 text-sm font-normal ml-4 border-l border-white/20 pl-4">${product.price}</span>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </Button>
-                        </div>
-
-                        <div className="mt-8 flex items-center gap-6 text-sm text-gray-500">
-                            <div className="flex items-center gap-2">
-                                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                <span className="font-bold text-gray-900">4.9/5</span>
-                                <span className="underline cursor-pointer">320+ Reviews</span>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1 }}
-                        className="relative h-[500px] lg:h-[650px] w-full"
-                    >
-                        <Image
-                            src="/images/epiccotn/hero.png"
-                            alt="Epiccotn Everyday Panty Hero"
-                            fill
-                            className="object-contain rounded-[2.5rem]"
-                            priority
-                        />
-                        <div className="absolute -z-10 -top-20 -right-20 w-80 h-80 bg-[var(--primary)] opacity-10 blur-[100px] rounded-full" />
-                        <div className="absolute -z-10 -bottom-20 -left-20 w-80 h-80 bg-[var(--accent)] opacity-20 blur-[100px] rounded-full" />
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Founder's Narrative */}
-            <section id="story" className="py-24 bg-white">
-                <div className="container mx-auto px-6 max-w-4xl text-center">
-                    <motion.div {...fadeIn}>
-                        <h2 className="text-3xl md:text-4xl font-serif mb-8 text-gray-800">Designed by Women, for Every Body</h2>
-                        <div className="w-16 h-1 bg-[var(--accent)] mx-auto mb-10" />
-                        <p className="text-lg text-gray-600 mb-6 italic leading-relaxed">
-                            "We believe that wellness begins with the first layer you put on your body. Our mission is to create innerwear that nurtures both women and the planet, without compromise."
-                        </p>
-                        <p className="font-serif text-gray-900">— Founder, Epiccotn</p>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Why: Problem/Solution Grid */}
-            <section className="py-24 bg-[var(--background)]">
-                <div className="container mx-auto px-6 text-center mb-16">
-                    <motion.h2 {...fadeIn} className="text-4xl font-serif mb-4 text-gray-900">Why Epiccotn?</motion.h2>
-                    <motion.p {...fadeIn} className="text-gray-600 max-w-2xl mx-auto">Common pain points addressed with elegant functionality.</motion.p>
-                </div>
-
-                <div className="container mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {[
-                        {
-                            problem: "Limited Period Features",
-                            solution: "Built-in Pad Holder",
-                            icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
-                            videoSrc: "/videos/product-demo.mp4",
-                            posterSrc: "/images/epiccotn/pad-holder-poster.png"
-                        },
-                        {
-                            problem: "Poor Hygiene & Odor",
-                            solution: "Antimicrobial Protection",
-                            icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
-                            videoSrc: "/videos/product-demo.mp4",
-                            posterSrc: "/images/epiccotn/antimicrobial-poster.png"
-                        },
-                        {
-                            problem: "Visible Panty Lines (VPL)",
-                            solution: "Invisible Seamless Fit",
-                            icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
-                            videoSrc: "/videos/product-demo.mp4",
-                            posterSrc: "/images/epiccotn/seamless-fit-poster.png"
-                        },
-                        {
-                            problem: "Lack of Discreet Storage",
-                            solution: "Hidden Front Pocket",
-                            icon: <X className="text-red-400 w-5 h-5" />,
-                            solveIcon: <Check className="text-green-500 w-5 h-5" />,
-                            videoSrc: "/videos/product-demo.mp4",
-                            posterSrc: "/images/epiccotn/hidden-pocket-poster.png"
-                        }
-                    ].map((item, i) => (
-                        <motion.div
-                            key={i}
-                            whileHover={{ y: -5 }}
-                            className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden group"
-                        >
-                            <div className="relative h-48 w-full bg-gray-50 flex items-center justify-center border-b border-gray-100 overflow-hidden">
-                                <Image
-                                    src={item.posterSrc}
-                                    alt={item.solution}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                />
-                                <video 
-                                    src={item.videoSrc} 
-                                    poster={item.posterSrc}
-                                    autoPlay 
-                                    loop 
-                                    muted 
-                                    playsInline 
-                                    className="absolute inset-0 w-full h-full object-cover z-20 transition-opacity duration-300 pointer-events-none opacity-0 data-[loaded=true]:opacity-100"
-                                    onLoadedData={(e) => {
-                                        e.currentTarget.setAttribute("data-loaded", "true");
-                                    }}
-                                />
-                                {/* Play icon overlay indicating Video Theme Area */}
-                                <div className="absolute top-4 right-4 z-30 bg-white/50 backdrop-blur-md rounded-full p-2 shadow-sm pointer-events-none">
-                                    <div className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></div>
-                                </div>
-                            </div>
-                            <div className="p-8 flex-grow">
-                                <div className="mb-6 flex justify-between items-start">
-                                    <div className="bg-red-50 p-2 rounded-lg">{item.icon}</div>
-                                    <div className="bg-green-50 p-2 rounded-lg">{item.solveIcon}</div>
-                                </div>
-                                <div>
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Problem</div>
-                                    <h3 className="text-lg font-medium text-gray-500 mb-4 line-through decoration-red-200">{item.problem}</h3>
-                                    <div className="text-xs font-bold text-[var(--primary)] uppercase tracking-widest mb-1">Wellness Solution</div>
-                                    <p className="text-xl font-serif text-gray-900">{item.solution}</p>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Technical Deep Dive */}
-            <section id="science" className="py-24 bg-white overflow-hidden">
-                <div className="container mx-auto px-6">
-                    <div className="grid md:grid-cols-2 gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="relative h-[500px]"
-                        >
-                            <Image
-                                src="/images/epiccotn/diagram.png"
-                                alt="Science of Epiccotn Diagram"
-                                fill
-                                className="object-contain rounded-[2.5rem]"
-                            />
-                        </motion.div>
-
-                        <motion.div
-                            {...staggeredFade}
-                            className="space-y-12"
-                        >
-                            <motion.div variants={childFade}>
-                                <h2 className="text-4xl font-serif mb-6">Scientific Nurturing</h2>
-                                <p className="text-gray-600 text-lg leading-relaxed">
-                                    We've engineered every fiber to support your skin's natural microbiome while providing medical-grade protection.
-                                </p>
-                            </motion.div>
-
-                            <div className="grid gap-8">
-                                <motion.div variants={childFade} className="flex gap-4">
-                                    <div className="bg-[var(--primary)]/20 p-4 rounded-xl h-fit">
-                                        <Droplets className="text-[var(--primary)] w-6 h-6" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-xl font-serif mb-2 text-gray-900">Probiotic Skin Finish</h4>
-                                        <p className="text-gray-600">A revolutionary finish containing active probiotics that balance the skin's healthy flora and prevent dryness.</p>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Fabric Section */}
-            <section className="py-24 px-6 md:px-12">
-                <div className="container mx-auto max-w-7xl bg-[var(--accent)]/30 rounded-[3rem] p-10 md:p-24 overflow-hidden relative">
-                    <div className="absolute -top-40 -right-40 w-[40rem] h-[40rem] bg-white/60 rounded-full blur-[100px] pointer-events-none"></div>
-                    
-                    <div className="grid md:grid-cols-2 gap-16 items-center relative z-10 flex-row-reverse">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ staggerChildren: 0.2 }}
-                            className="order-2 md:order-1"
-                        >
-                            <span className="text-green-800 font-bold uppercase tracking-widest text-sm mb-4 block">Signature Material</span>
-                            <h2 className="text-4xl md:text-5xl font-sans mb-8 text-gray-900 leading-tight">The Wisdom of Trees.</h2>
-                            <p className="text-gray-800 text-xl mb-12 leading-relaxed font-light">
-                                Ethically sourced, incredibly soft. Our proprietary blend of <strong className="text-green-900 font-bold bg-white/80 px-2 py-1 rounded-md shadow-sm border border-green-100">Organic Bamboo</strong> and Lyocell is 3x more breathable than standard cotton and requires 80% less water to produce.
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
-                                    <div className="bg-green-100 p-3 rounded-full mb-4">
-                                        <Leaf className="text-green-700 w-6 h-6" />
-                                    </div>
-                                    <span className="text-gray-900 font-bold text-sm uppercase tracking-wide">Sustainable<br/>Sourcing</span>
-                                </div>
-                                <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white border-b-2 shadow-sm flex flex-col items-center text-center hover:scale-105 transition-transform duration-300">
-                                    <div className="bg-blue-50 p-3 rounded-full mb-4">
-                                        <Wind className="text-blue-500 w-6 h-6" />
-                                    </div>
-                                    <span className="text-gray-900 font-bold text-sm uppercase tracking-wide">Ultra<br/>Breathable</span>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="relative h-[400px] md:h-[500px] order-1 md:order-2 w-full group"
-                        >
-                            <Image
-                                src="/images/epiccotn/pocket.png"
-                                alt="Epiccotn Bamboo Fabric Detail"
-                                fill
-                                className="object-cover rounded-[2rem] shadow-xl border-4 border-white transition-transform duration-700 group-hover:scale-105"
-                            />
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Absorbency & Care Section (Slide 5-6) */}
-            <section className="py-24 bg-white overflow-hidden">
-                <div className="container mx-auto px-6">
-                    <div className="grid md:grid-cols-2 gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="relative h-[500px]"
-                        >
-                            <Image
-                                src="/images/epiccotn/back.png"
-                                alt="Absorbency Features"
-                                fill
-                                className="object-contain rounded-[2.5rem]"
-                            />
-                        </motion.div>
-
-                        <motion.div {...staggeredFade} className="space-y-8">
-                            <motion.div variants={childFade}>
-                                <h2 className="text-4xl font-serif mb-6">Advanced Absorbency</h2>
-                                <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                                    Natural wisdom meets modern science. Our multi-layer protection is designed for your lightest and moderate flow days.
-                                </p>
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-pink-50 p-2 rounded-full">
-                                            <Droplets className="text-pink-500 w-5 h-5" />
-                                        </div>
-                                        <p className="text-gray-900 font-medium">Absorbs up to 50 ml of fluid</p>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-blue-50 p-2 rounded-full">
-                                            <Wind className="text-blue-500 w-5 h-5" />
-                                        </div>
-                                        <p className="text-gray-900 font-medium">Total Odor Protection</p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </motion.div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-                        <motion.div {...staggeredFade} className="order-2 md:order-1 space-y-8">
-                            <motion.div variants={childFade}>
-                                <h2 className="text-4xl font-serif mb-6">Smart Design Innovation</h2>
-                                <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                                    Our patented pad holder technology ensures security and comfort during high-intensity activities.
-                                </p>
-                                <ul className="space-y-4 text-gray-700">
-                                    <li className="flex gap-3"><Check className="text-[var(--primary)] w-5 h-5" /> Secure Fit Technology</li>
-                                    <li className="flex gap-3"><Check className="text-[var(--primary)] w-5 h-5" /> Breathable Layering</li>
-                                    <li className="flex gap-3"><Check className="text-[var(--primary)] w-5 h-5" /> Easy-wash Durability</li>
-                                </ul>
-                            </motion.div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="relative h-[500px] order-1 md:order-2"
-                        >
-                            <Image
-                                src="/images/epiccotn/crotch.png"
-                                alt="Smart Design Detail"
-                                fill
-                                className="object-contain rounded-[2.5rem]"
-                            />
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* FAQ & Details Section */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-6 max-w-4xl">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-serif mb-4 text-gray-900">Details & FAQ</h2>
-                        <p className="text-gray-500 italic">Everything you need to know about your new daily companion.</p>
-                    </div>
-
-                    <div className="space-y-6">
-                        {[
-                            {
-                                q: "How do I care for my Everyday Panty?",
-                                a: "Machine wash on cold with like colors. Tumble dry on low or hang dry to preserve the probiotic finish. Avoid bleach and fabric softeners."
-                            },
-                            {
-                                q: "What is the primary material?",
-                                a: "Our signature blend consists of 65% Organic Bamboo, 30% Lyocell, and 5% Spandex for the perfect balance of breathability, softness, and stretch."
-                            },
-                            {
-                                q: "Is the probiotic finish safe for sensitive skin?",
-                                a: "Yes, it is specifically designed to be hypoallergenic. The probiotics are encapsulated and slowly release as you wear the garment, helping to maintain your skin's natural healthy microbiome."
-                            },
-                            {
-                                q: "Do these work with menstrual pads?",
-                                a: "Absolutely. We've integrated hidden, secure holders that prevent pad slippage during high-movement activities while remaining completely invisible from the outside."
-                            }
-                        ].map((faq, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 10 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.05 }}
-                                className="border-b border-gray-100 pb-6"
-                            >
-                                <h4 className="text-lg font-bold text-gray-900 mb-2">{faq.q}</h4>
-                                <p className="text-gray-600 leading-relaxed font-serif italic text-sm">{faq.a}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 pt-12 border-t border-gray-100 italic font-serif text-sm text-gray-400">
-                        <div className="text-center">Eco-Friendly Packaging</div>
-                        <div className="text-center">Ethically Manufactured</div>
-                        <div className="text-center">Climate Neutral Cert.</div>
-                    </div>
-                </div>
-            </section>
-            {/* Competition Comparison Section */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <motion.h2 {...fadeIn} className="text-4xl font-serif mb-4 text-gray-900">Epiccotn vs. The Competition</motion.h2>
-                        <motion.p {...fadeIn} className="text-gray-500 italic">Leading the way in innovation and comfort.</motion.p>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="border-b-2 border-gray-100">
-                                    <th className="py-6 px-4 font-serif text-lg text-gray-400">Feature / Brand</th>
-                                    <th className="py-6 px-4 font-serif text-lg text-gray-900">Epiccotn</th>
-                                    <th className="py-6 px-4 font-serif text-lg text-gray-400">Traditional</th>
-                                    <th className="py-6 px-4 font-serif text-lg text-gray-400">Synthetic</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {[
-                                    { f: "Seamless/Invisible Fit", e: "Yes (Core)", t: "No (Thick)", s: "Variable" },
-                                    { f: "Organic Bamboo/Lyocell", e: "Yes (Core)", t: "No", s: "No" },
-                                    { f: "Probiotic Textile Finish", e: "Yes (Refined)", t: "No", s: "No" },
-                                    { f: "Built-in Pad Holder", e: "Yes (Integrated)", t: "No", s: "Optional" },
-                                    { f: "Hidden Front Pocket", e: "Yes (Functional)", t: "No", s: "No" },
-                                ].map((row, i) => (
-                                    <tr key={i} className="border-b border-gray-50 group hover:bg-gray-50 transition-colors">
-                                        <td className="py-6 px-4 font-medium text-gray-700">{row.f}</td>
-                                        <td className="py-6 px-4 text-[var(--primary)] font-bold flex items-center gap-2">
-                                            <Check className="w-4 h-4" /> {row.e}
-                                        </td>
-                                        <td className="py-6 px-4 text-gray-400">{row.t}</td>
-                                        <td className="py-6 px-4 text-gray-400">{row.s}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            {/* Core Customer Section */}
-            <section className="py-24 bg-gray-50">
-                <div className="container mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <motion.div {...fadeIn}>
-                            <h2 className="text-4xl font-serif mb-8 text-gray-900">The Wellness-Conscious Woman</h2>
-                            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                                Our core customer prioritizes holistic well-being, an active lifestyle, and mindful consumption. She demands innerwear that feels good all day, every day.
-                            </p>
-                            <div className="space-y-6">
-                                {[
-                                    { t: "Health & Wellness Enthusiast", d: "Prioritizes holistic well-being and active living." },
-                                    { t: "Eco-Conscious", d: "Seeks sustainable products and sourcing transparency." },
-                                    { t: "Practical & Functional", d: "Appreciates smart design that solves real-world problems." },
-                                ].map((item, i) => (
-                                    <div key={i} className="flex gap-4">
-                                        <div className="w-2 h-2 rounded-full bg-[var(--primary)] mt-2" />
-                                        <div>
-                                            <h4 className="font-bold text-gray-900">{item.t}</h4>
-                                            <p className="text-sm text-gray-500">{item.d}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            className="bg-white p-12 rounded-[3rem] shadow-xl border border-gray-100"
-                        >
-                            <div className="text-center">
-                                <Star className="w-12 h-12 text-amber-400 mx-auto mb-6 fill-amber-400" />
-                                <h3 className="text-3xl font-serif mb-4 text-gray-900">98% Satisfaction</h3>
-                                <p className="text-gray-500 italic">"I finally found underwear that understands my body's needs throughout the entire month."</p>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            <section className="py-32 bg-[var(--primary)] text-white text-center rounded-t-[4rem]">
-                <div className="container mx-auto px-6 max-w-3xl">
-                    <motion.div {...fadeIn}>
-                        <h2 className="text-4xl md:text-5xl font-serif mb-8">Ready to rediscover comfort?</h2>
-                        <p className="text-xl mb-12 opacity-90 font-light text-[var(--primary-foreground)]">Experience the difference of scientific wellness firsthand.</p>
-                        <Button
-                            size="lg"
-                            onClick={handleAddToCart}
-                            disabled={isAdding}
-                            className="bg-white text-[var(--primary)] hover:bg-gray-50 px-12 py-7 text-lg rounded-full shadow-xl font-medium transition-all hover:-translate-y-1 active:scale-95"
-                        >
-                            {isAdding ? "Adding..." : "Shop the Everyday Panty"}
-                        </Button>
-                    </motion.div>
-                </div>
-            </section>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border border-border">
+            {[
+              { num: "01", icon: <Droplets className="w-11 h-11 text-lime stroke-[1.2]" />, title: "3X Faster Sweat Absorption", desc: "Micro-channel bamboo fibres draw moisture away from skin 3× faster than conventional cotton." },
+              { num: "02", icon: <Wind className="w-11 h-11 text-lime stroke-[1.2]" />, title: "5X More Breathable", desc: "Natural Micro-Gaps in bamboo's hollow fibre structure create continuous airflow. Cooler, fresher." },
+              { num: "03", icon: <Shield className="w-11 h-11 text-lime stroke-[1.2]" />, title: "Natural Antibacterial", desc: "Bamboo's kun property inhibits bacteria growth naturally — no synthetic antimicrobials." },
+              { num: "04", icon: (
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-11 h-11 text-lime">
+                  <path d="M46.5 28.5C46.5 36.5 40 43 32 43C24 43 17.5 36.5 17.5 28.5C17.5 20.5 24 14 32 14C40 14 46.5 20.5 46.5 28.5Z" strokeDasharray="2 2" className="opacity-30" />
+                  <path d="M42.5 28.5C42.5 34.299 37.799 39 32 39C26.201 39 21.5 34.299 21.5 28.5C21.5 22.701 26.201 18 32 18C37.799 18 42.5 22.701 42.5 28.5Z" />
+                  <path d="M37.5 41L21 57.5M21 57.5L28 57.5M21 57.5L21 50.5" strokeWidth="2"/>
+                  <path d="M31.5 45L15 61.5M15 61.5L22 61.5" strokeWidth="2" className="opacity-50"/>
+                  <path d="M43.5 37L27 53.5M27 53.5L34 53.5" strokeWidth="2" className="opacity-50"/>
+                  <text x="32" y="32.5" fontSize="9" textAnchor="middle" fontWeight="900" fontFamily="sans-serif" fill="currentColor" stroke="none">UV</text>
+                </svg>
+              ), title: "UPF 50+ Protection", desc: "Certified UPF 50+ blocks 98% of UV radiation. Natural protection built into every fibre." },
+            ].map((card, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.7 }}
+                className="p-11 lg:px-8 border-r border-b lg:border-b-0 border-border relative overflow-hidden group hover:bg-white/5 transition-colors cursor-default"
+              >
+                <span className="absolute top-6 right-6 font-syne font-bold text-[11px] text-white/10 tracking-[0.1em]">{card.num}</span>
+                <div className="mb-6">{card.icon}</div>
+                <h3 className="font-syne text-[16px] font-bold tracking-[-0.01em] uppercase mb-3 leading-[1.2]">{card.title}</h3>
+                <p className="text-[13px] font-light text-text-dim leading-[1.7]">{card.desc}</p>
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-lime scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
+              </motion.div>
+            ))}
+          </div>
         </div>
-    )
+      </section>
+
+      {/* ═══ FABRIC SYSTEM ═══ */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-border">
+        {/* Left */}
+        <div className="p-16 px-6 lg:px-16 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-border">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+            <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Scientific Nurturing</p>
+            <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">4-Layer<br/>ProTech<br/>System.</h2>
+            
+            <div className="flex flex-col gap-[2px] mt-12">
+              {[
+                { name: "Ultra-soft bamboo shell", cl: "bg-white/10 border-l-lime" },
+                { name: "Moisture-wicking transfer", cl: "bg-white/5 border-l-lime/50" },
+                { name: "ProTech absorbent core", cl: "bg-white/5 border-l-lime/25" },
+                { name: "Ultrasonic leak-proof barrier", cl: "bg-white/5 border-l-lime/10" },
+              ].map((layer, i) => (
+                <div key={i} className={cn("flex items-center justify-between p-5 px-7 cursor-default relative overflow-hidden group border-l-[3px] transition-all hover:pl-9", layer.cl)}>
+                  <div className="absolute inset-y-0 left-0 w-0 bg-lime/10 transition-all duration-300 group-hover:w-full" />
+                  <span className="relative z-10 font-syne text-[13px] font-semibold tracking-[0.04em] uppercase">{layer.name}</span>
+                  <span className="relative z-10 font-syne font-bold text-[32px] text-white/5 leading-none">{i + 1}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right */}
+        <div className="p-16 px-6 lg:px-16 flex flex-col justify-center bg-lime/5">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.1 }}>
+            <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Wisdom of Trees</p>
+            <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">Engineered<br/>for Her.</h2>
+            
+            <div className="flex flex-col mt-9">
+              {[
+                { t: "100% Organic Bamboo Shell", d: "Clinically proven pure. Softer than cotton. Naturally antibacterial. pH-balanced for intimate skin — no synthetic irritants, ever." },
+                { t: "ProTech Absorbent Core", d: "Locks fluid away instantly. Holds up to 35ml — equivalent to 7 tampons — without ever feeling wet. Tested to 8+ hours." },
+                { t: "Ultrasonic Leak-Proof Barrier", d: "Heat-bonded, not glued. No PFAS. No chemical waterproofing. Stays intact wash after wash — engineered to last 2+ years." },
+                { t: "Dermatologist Approved", d: "Tested and verified safe for sensitive skin. Free from PFAS, phthalates, synthetic fragrances, and all known endocrine disruptors." },
+              ].map((feat, i) => (
+                <div key={i} className="py-6 border-b border-border flex gap-5 items-start cursor-default transition-all hover:pl-2 last:border-b-0">
+                  <span className="font-syne font-bold text-[11px] text-lime tracking-[0.1em] shrink-0 pt-0.5">0{i + 1}</span>
+                  <div>
+                    <h3 className="font-syne text-[16px] font-bold tracking-[-0.01em] uppercase mb-1.5">{feat.t}</h3>
+                    <p className="text-[13px] font-light text-text-dim leading-[1.65]">{feat.d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ═══ ABSORBENCY + CERTS ═══ */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-border">
+        {/* Left */}
+        <div className="p-16 px-6 lg:px-16 border-b lg:border-b-0 lg:border-r border-border flex flex-col justify-center">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+            <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Advanced Absorbency</p>
+            <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">From Light<br/>Days to Your<br/>Heaviest.</h2>
+            
+            <div className="flex flex-col gap-7 mt-12">
+              {[
+                { n: "Light / Everyday", v: "Up to 15ml", w: "38%", no: "~3 tampons · everyday comfort" },
+                { n: "Medium / Regular", v: "Up to 25ml", w: "64%", no: "~5 tampons · all-day protection" },
+                { n: "Heavy / Overnight", v: "Up to 35ml", w: "90%", no: "~7 tampons · overnight confidence" },
+              ].map((lvl, i) => (
+                <div key={i}>
+                  <div className="flex justify-between mb-2.5">
+                    <span className="font-syne text-[13px] font-semibold tracking-[0.04em] uppercase">{lvl.n}</span>
+                    <span className="font-syne font-bold text-[13px] text-lime">{lvl.v}</span>
+                  </div>
+                  <div className="h-1 bg-border relative">
+                    <motion.div 
+                      className="absolute inset-y-0 left-0 bg-lime"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: lvl.w }}
+                      transition={{ duration: 1.4, ease: "easeOut", delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                    >
+                      <div className="absolute -right-px -top-1 w-[2px] h-3 bg-lime opacity-60" />
+                    </motion.div>
+                  </div>
+                  <p className="text-[12px] text-text-dim mt-2 italic">{lvl.no}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Right */}
+        <div className="p-16 px-6 lg:px-16 flex flex-col justify-center">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.1 }}>
+            <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Certifications</p>
+            <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">You Read<br/>the Label.<br/>We Earn It.</h2>
+            
+            <div className="grid grid-cols-2 gap-3 mt-10">
+              {[
+                { icon: "🌱", n: "Purity Standard", d: "Every material tested and verified free of 100+ harmful substances." },
+                { icon: "✓", n: "PFAS-Free", d: "Zero forever chemicals. Ultrasonic bonding replaces chemical waterproofing entirely." },
+                { icon: "🧬", n: "Derm Tested", d: "Clinically tested for sensitive skin. pH balanced to maintain natural microbiome." },
+                { icon: "♻️", n: "Eco-Certified", d: "GOTS certified organic. Bamboo uses 70% less water than cotton." }
+              ].map((cert, i) => (
+                <div key={i} className="border border-border p-6 px-5 transition-colors hover:border-lime/30">
+                  <span className="text-[22px] mb-3 block">{cert.icon}</span>
+                  <h3 className="font-syne text-[13px] font-bold tracking-[0.02em] uppercase mb-1.5">{cert.n}</h3>
+                  <p className="text-[12px] text-text-dim leading-[1.6]">{cert.d}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ═══ COMPARISON ═══ */}
+      <section className="py-[100px] px-6 lg:px-16 border-b border-border">
+        <div className="max-w-[1440px] mx-auto">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="flex flex-col lg:flex-row justify-between items-end mb-14 gap-4">
+            <div>
+              <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Epiccotn vs. The Competition</p>
+              <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">The Only<br/>Comparison<br/>That Matters.</h2>
+            </div>
+            <p className="font-inter text-[15px] font-light leading-[1.75] text-text-mid max-w-[360px]">
+              No other brand combines certified organic fabric with clinical-grade period protection and a 2-year lifespan. The data speaks clearly.
+            </p>
+          </motion.div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse min-w-[600px]">
+              <thead>
+                <tr>
+                  <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[36%]">Product Feature</th>
+                  <th className="bg-lime/5 border-b border-lime/30 text-center relative w-[21%]">
+                    <div className="absolute top-0 inset-x-0 h-[2px] bg-lime" />
+                    <div className="flex flex-col items-center gap-1.5 py-4">
+                      <span className="bg-lime text-black font-syne font-bold text-[9px] px-2.5 py-[3px] tracking-[0.08em] uppercase">Best Pick</span>
+                      <span className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase text-lime">Epiccotn</span>
+                    </div>
+                  </th>
+                  <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[21%]">Traditional Pads</th>
+                  <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[22%]">Synthetic Brands</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { f: "Organic certified fabric", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
+                  { f: "PFAS-free construction", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
+                  { f: "4-layer ProTech core", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
+                  { f: "Dermatologist approved", e: "✓", t: "—", s: "Varies", c1: true, c2: false, c3: false, ts: true },
+                  { f: "Lasts 2+ years", e: "✓", t: "—", s: "✓", c1: true, c2: false, c3: true },
+                  { f: "Replaces 150+ pads/year", e: "✓", t: "—", s: "✓", c1: true, c2: false, c3: true },
+                ].map((row, i) => (
+                  <tr key={i} className="group transition-colors">
+                    <td className="py-4.5 px-7 text-[13px] font-light text-white/45 border-b border-border group-hover:bg-white/5">{row.f}</td>
+                    <td className="py-4.5 px-7 bg-lime/10 text-center border-b border-border group-hover:bg-lime/20">
+                      <span className="text-[16px] text-lime">{row.e}</span>
+                    </td>
+                    <td className="py-4.5 px-7 text-[13px] font-light border-b border-border group-hover:bg-white/5">
+                      <span className="text-[16px] text-white/15">{row.t}</span>
+                    </td>
+                    <td className="py-4.5 px-7 text-[13px] font-light border-b border-border group-hover:bg-white/5 text-white/45">
+                      <span className={cn("text-[16px]", row.c3 ? "text-lime" : row.ts ? "" : "text-white/15")}>{row.s}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ REVIEWS ═══ */}
+      <section className="py-[100px] px-6 lg:px-16 border-b border-border" id="reviews">
+        <div className="max-w-[1440px] mx-auto">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="flex flex-col lg:flex-row justify-between items-end mb-14 gap-4">
+            <div>
+              <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Real Women, Real Results</p>
+              <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">Join the<br/>Movement.</h2>
+            </div>
+            {/* <Link href="#reviews" className="bg-transparent text-white font-syne text-[13px] font-semibold tracking-[0.06em] uppercase px-7 py-[0.8rem] border border-border-lt hover:bg-white/5 hover:border-white/35 transition-all">
+              Read All Reviews →
+            </Link> */}
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0.5 bg-border">
+            {[
+              { body: `"I forgot I was wearing them. That's the highest compliment I can give period underwear. Nothing else comes close."`, author: "Sarah M. — Verified Buyer" },
+              { body: `"Switched from tampons after 12 years. Zero leaks overnight. The bamboo is impossibly soft on sensitive skin."`, author: "Priya K. — Verified Buyer" },
+              { body: `"Endometriosis, heavy flow, sensitive skin — Epiccotn ticks every single box. Worth every penny, every single month."`, author: "Amelia R. — Verified Buyer" },
+            ].map((rev, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.7 }}
+                className="bg-offblack p-10 px-8 border-b-2 border-transparent hover:bg-white/5 hover:border-lime transition-all cursor-default"
+              >
+                <div className="text-lime text-[13px] tracking-[0.05em] mb-5">★★★★★</div>
+                <p className="font-inter text-[16px] font-light leading-[1.6] text-white italic mb-6">{rev.body}</p>
+                <p className="font-syne font-bold text-[11px] text-text-dim tracking-[0.1em] uppercase">{rev.author}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ FAQ ═══ */}
+      <section className="grid grid-cols-1 md:grid-cols-[1fr_2fr] border-b border-border" id="faq">
+        <div className="p-16 px-6 lg:px-16 border-b md:border-b-0 md:border-r border-border">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+            <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-4">Got Questions?</p>
+            <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase">Details<br/>&amp; FAQ</h2>
+            <div className="mt-10 p-7 border border-border flex flex-col gap-3">
+              <h3 className="font-syne text-[16px] font-bold uppercase tracking-[-0.01em]">Still unsure?</h3>
+              <p className="text-[13px] text-text-dim font-light leading-[1.6]">Our team replies within 2 hours. We&apos;ll help you find your perfect fit and absorbency level.</p>
+              <Link href="/contact" className="bg-lime text-black font-syne text-[12px] font-bold uppercase tracking-[0.06em] px-6 py-3 mt-1 hover:bg-lime-dk transition-colors w-fit block decoration-none">
+                Contact Support →
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="p-16 px-6 lg:px-16">
+          <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.1 }}>
+            {[
+              { q: "How do I care for my Epiccotn?", a: "Rinse in cold water after use. Machine wash gentle at 30°C max. Do not tumble dry or use fabric softener — hang dry to preserve the ProTech core. Properly cared for, each pair lasts 2+ years with full performance." },
+              { q: "When does it start working?", a: "Immediately — from the very first wear. No break-in period required. Epiccotn's bamboo shell and ProTech core are fully functional right out of the packaging." },
+              { q: "Does it fit every body type?", a: "Yes. Epiccotn comes in XS to 4XL with 4-way stretch fabric and proportional grading — meaning each size is individually engineered for fit, not just stretched. Use our size guide if you're between sizes." },
+              { q: "Can I use it with other period products?", a: "Absolutely. Many customers pair Epiccotn with a menstrual cup or disc on their heaviest days. For light-to-medium flow, Epiccotn works confidently as a complete standalone product." },
+              { q: "What's your return policy?", a: "Free returns within 30 days, no questions asked. Don't like your first pair? It's on us — full refund guaranteed. This is our Comfort Guarantee and we stand behind it completely." },
+            ].map((faq, i) => (
+              <div key={i} className="border-b border-border group">
+                <div onClick={() => toggleFaq(i)} className="flex justify-between items-center py-5 cursor-pointer font-syne text-[16px] font-semibold tracking-[-0.01em] uppercase text-white/75 hover:text-white transition-colors gap-5 select-none md:pr-4">
+                  <span className={openFaq === i ? "text-white" : ""}>{faq.q}</span>
+                  <div className={cn("shrink-0 w-6 h-6 border border-border flex items-center justify-center text-text-dim text-[16px] transition-all", openFaq === i ? "border-lime text-lime rotate-45" : "")}>
+                    <Plus className={cn("w-4 h-4 transition-transform", openFaq === i ? "rotate-45" : "")} />
+                  </div>
+                </div>
+                <div className={cn("font-inter text-[14px] font-light text-text-dim leading-[1.8] overflow-hidden transition-all duration-400 ease-out", openFaq === i ? "max-h-[180px] opacity-100 pb-6" : "max-h-0 opacity-0 pb-0")}>
+                  {faq.a}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* COMFORT GUARANTEE REMOVED */}
+
+      {/* ═══ PRE-FOOTER CTA ═══ */}
+      <section className="min-h-[480px] flex flex-col items-center justify-center text-center p-[100px] px-6 relative overflow-hidden bg-black border-b border-border">
+        {/* Background Text */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-syne text-[clamp(80px,18vw,220px)] font-extrabold text-white/[0.025] whitespace-nowrap tracking-[-0.04em] uppercase pointer-events-none select-none">
+          EPICCOTN
+        </div>
+        
+        <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative z-10 w-full flex flex-col items-center">
+          <p className="font-syne font-bold text-[11px] tracking-[0.16em] uppercase text-lime mb-5">Ready When You Are</p>
+          <h2 className="font-syne text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] uppercase text-white mb-3">
+            Ready to<br/><span className="text-lime">Rediscover</span><br/>Comfort?
+          </h2>
+          <p className="font-inter text-[15px] font-light leading-[1.75] text-text-mid max-w-[520px] mb-12">
+            First pair guarantee. Free returns. Ships in 24 hours.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link href="/products" className="bg-lime hover:bg-lime-dk text-black font-syne text-[14px] font-bold tracking-[0.06em] uppercase px-14 py-4 transition-all hover:-translate-y-[2px]">
+              Shop Collection →
+            </Link>
+            {/* <Link href="/products" className="bg-black border border-border-lt hover:border-white/35 hover:bg-white/5 text-white font-syne text-[13px] font-semibold tracking-[0.06em] uppercase px-8 py-4 transition-all">
+              Get the Starter Bundle
+            </Link> */}
+          </div>
+
+          {/* TRUST STRIP REMOVED */}
+        </motion.div>
+      </section>
+      
+    </div>
+  )
 }

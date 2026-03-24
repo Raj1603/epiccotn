@@ -28,7 +28,7 @@ export function FeatureBanner({ title, description, image, cta, reverse = false,
           {badge && (
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{badge}</span>
           )}
-          <h2 className="text-2xl md:text-3xl font-serif font-bold mb-3 leading-tight">{title}</h2>
+          <h2 className="text-2xl md:text-3xl font-sans font-bold mb-3 leading-tight">{title}</h2>
           <p className="text-gray-600 mb-6 max-w-md">{description}</p>
           {cta && (
             <div suppressHydrationWarning>

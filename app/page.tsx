@@ -1,28 +1,29 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { getNavigationCategories, getNotifications } from "@/lib/fetchers"
+import { HeroCarousel } from "@/components/hero-carousel"
+import { FeaturesSlider } from "@/components/features-slider"
+import { ProblemSolution } from "@/components/problem-solution"
 import { WellnessProductDetail } from "@/components/wellness-product-detail"
-import { WellnessCommunity } from "@/components/wellness-community"
+import { WellnessSustainability } from "@/components/wellness-sustainability"
+import { BlogSection } from "@/components/blog-section"
+import { TrustFeaturesSection } from "@/components/trust-features-section"
+
+import { getNotifications } from "@/lib/fetchers"
 
 export default async function HomePage() {
-  const [notifications] = await Promise.all([
-    getNotifications()
-  ])
-
-  // Placeholder product data for the Everyday Panty
-  const product = {
-    id: "everyday-panty-001",
-    name: "Everyday Panty",
-    price: 45.00,
-    description: "A revolutionary innerwear item designed for daily wellness, comfort, and confidence."
-  }
+  const notifications = await getNotifications()
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" suppressHydrationWarning>
       <Header notifications={notifications} />
-      <main className="pt-20">
-        <WellnessProductDetail product={product} />
-        <WellnessCommunity />
+      <main>
+        <HeroCarousel />
+        <FeaturesSlider />
+        <ProblemSolution />
+        <WellnessProductDetail />
+        <WellnessSustainability />
+        <BlogSection />
+        <TrustFeaturesSection />
       </main>
       <Footer />
     </div>

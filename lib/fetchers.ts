@@ -2,43 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import { Product, Category, NavigationCategory, Notification } from '@/lib/types'
 import { resolveProductImage, resolveCategoryImage } from '@/lib/image-fallbacks'
 
-// Fallback images taken from the reference site (used when DB rows have no images)
-const nomadFallbacks: {
-    categories: Record<string, string>
-    products: Record<string, string>
-} = {
-    categories: {
-        'cases-main': 'https://cdn.shopify.com/s/files/1/0384/6721/files/856504014049_B_iPhone.jpg?v=1758036362',
-        'charging-main': 'https://cdn.shopify.com/s/files/1/0384/6721/files/856504014940_B.jpg?v=1737647869',
-        'tracking-wallets': 'https://cdn.shopify.com/s/files/1/0384/6721/files/856504014995_E_385e49a5-0327-4c05-8f55-a5a53c9f0225.jpg?v=1763412254',
-        'apple-watch-main': 'https://cdn.shopify.com/s/files/1/0384/6721/files/sport-band-45mm-black-back.jpg?v=1762975245',
-        'more-gear': 'https://cdn.shopify.com/s/files/1/0384/6721/files/856504014742_A_LOGO_162057a5-e74b-4a6e-95ab-7994957346d4.jpg?v=1750191396',
-    },
-    products: {
-        // Add product-specific fallbacks keyed by slug when useful
-    },
-}
-
 // Mapper to convert DB product to UI Product
 function mapProduct(item: any): Product {
-    // Sanitization Helper
-    const sanitizeText = (text: string) => {
-        if (!text) return ''
-        return text
-            .replace(/Nomad/g, 'Epiccotn')
-            .replace(/Osyndo/g, 'Epiccotn')
-            .replace(/WellnessFit/g, 'Epiccotn')
-            .replace(/Horween/g, 'Premium')
-            .replace(/Base One/g, 'MagStation')
-            .replace(/Kevlar/g, 'Rugged')
-            .replace(/Apple Watch/g, 'Smart Watch') // Optional genericizing
-    }
-
     return {
         id: item.id,
-        name: sanitizeText(item.name),
+        name: item.name,
         slug: item.slug,
-        subtitle: sanitizeText(item.description || ''),
+        subtitle: item.subtitle || item.description || '',
         price: item.price / 100,
         originalPrice: item.compare_at_price ? item.compare_at_price / 100 : undefined,
         image: resolveProductImage(item.slug, (item.images && item.images.length > 0 && item.images[0]) || undefined),
@@ -61,60 +31,23 @@ export async function getNavigationCategories(): Promise<NavigationCategory[]> {
         return []
     }
 
-    const sanitizeText = (text: string) => {
-        if (!text) return ''
-        return text
-            .replace(/Nomad/g, 'Epiccotn')
-            .replace(/Osyndo/g, 'Epiccotn')
-            .replace(/WellnessFit/g, 'Epiccotn')
-            .replace(/Horween/g, 'Premium')
-            .replace(/Base One/g, 'MagStation')
-            .replace(/Kevlar/g, 'Rugged')
-            .replace(/Apple Watch/g, 'Smart Watch')
-    }
-
     // Build Tree: Root -> Columns -> Items
-    // STRICT FILTER: Only show wellness-relevant categories
-    const validWellnessCategorySlugs = ['daily-wellness', 'sleep-recovery', 'active-care', 'the-science']
-    const roots = allCategories.filter((c: any) => !c.parent_id && validWellnessCategorySlugs.includes(c.slug))
+    // NO LONGER FILTERING BY LEGACY SLUGS. Show all categories that are configured for the brand.
+    const roots = allCategories.filter((c: any) => !c.parent_id)
 
-    // Deduplicate roots by name to avoid "Cases", "Charging" repeating
-    const uniqueRoots: any[] = []
-    const rootNames = new Set<string>()
-
-    // Sort roots so those with children come first to prioritize them during deduplication
-    const sortedRoots = [...roots].sort((a, b) => {
-        const aHasChildren = allCategories.some((c: any) => c.parent_id === a.id)
-        const bHasChildren = allCategories.some((c: any) => c.parent_id === b.id)
-        if (aHasChildren && !bHasChildren) return -1
-        if (!aHasChildren && bHasChildren) return 1
-        return (a.sort_order || 0) - (b.sort_order || 0)
-    })
-
-    for (const root of sortedRoots) {
-        const sanitizedName = sanitizeText(root.name)
-        if (!rootNames.has(sanitizedName)) {
-            rootNames.add(sanitizedName)
-            uniqueRoots.push(root)
-        }
-    }
-
-    // Sort back to original or by name if needed, here we'll keep the children-first or sort_order
-    uniqueRoots.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-
-    return uniqueRoots.map((root: any) => {
+    return roots.map((root: any) => {
         const columns = allCategories.filter((c: any) => c.parent_id === root.id)
         return {
-            name: sanitizeText(root.name),
+            name: root.name,
             slug: root.slug,
             columns: columns.map((col: any) => {
                 const items = allCategories.filter((c: any) => c.parent_id === col.id)
                 return {
-                    title: sanitizeText(col.name),
+                    title: col.name,
                     slug: col.slug,
                     image: resolveCategoryImage(root.slug, col.image),
                     items: items.map((item: any) => ({
-                        name: sanitizeText(item.name),
+                        name: item.name,
                         href: `/collections/${item.slug}`,
                         badge: item.badge
                     }))
@@ -127,43 +60,24 @@ export async function getNavigationCategories(): Promise<NavigationCategory[]> {
 export async function getNotifications(): Promise<Notification[]> {
     const supabase = await createClient()
 
-    // Fetch all products to serve as hero slides
+    // Fetch all products to serve as hero announcements
     const { data: latestProducts, error } = await supabase
         .from('products')
         .select('*')
         .order('created_at', { ascending: false })
+        .limit(10)
 
     if (error || !latestProducts) return []
 
-    // Filter out legacy tech items and ensure only wellness-appropriate products are shown
-    const wellnessProducts = latestProducts.filter((p: any) => {
-        const name = p.name.toLowerCase();
-        const category = p.categories?.name?.toLowerCase() || "";
-        
-        // STRICT EXCLUSION LIST (Foolproof)
-        const blockList = [
-            "gan nano", "nomad", "hub", "power bank", "case", "wallet", 
-            "cable", "apple watch", "kevlar", "band", "polish", "honey", 
-            "pet", "bowl", "leash", "toy", "mat", "dumbbell", "bottle", 
-            "cleanser", "roller", "gua sha", "scale", "toothbrush"
-        ];
-        
-        const isBlocked = blockList.some(term => name.includes(term));
-        const isWellnessCategory = category.includes("wellness") || category.includes("daily");
-        
-        return !isBlocked && isWellnessCategory;
-    })
-
-    return wellnessProducts.map((p: any) => ({
+    // Removed legacy blocklist. Trusting the Epiccotn-only database.
+    return latestProducts.map((p: any) => ({
         id: p.id,
-        title: p.name.replace(/Osyndo/g, 'Epiccotn').replace(/WellnessFit/g, 'Epiccotn'),
-        description: p.description
-            ? (p.description.length > 80 ? p.description.substring(0, 80).replace(/Osyndo/g, 'Epiccotn').replace(/WellnessFit/g, 'Epiccotn') + '...' : p.description.replace(/Osyndo/g, 'Epiccotn').replace(/WellnessFit/g, 'Epiccotn'))
-            : `Discover the wellness benefits of our latest release: ${p.name.replace(/Osyndo/g, 'Epiccotn').replace(/WellnessFit/g, 'Epiccotn')}.`,
+        title: "New Style Released",
+        description: `${p.name} is now available in the shop!`,
         image: resolveProductImage(p.slug, (p.images && p.images[0]) || undefined),
         time: 'Just now',
         link: `/products/${p.slug}`,
-        badge: p.badge || 'WELLNESS FOCUS'
+        badge: p.badge || 'EPICCOTN DNA'
     }))
 }
 
@@ -191,7 +105,7 @@ export async function getProducts(): Promise<Product[]> {
     const supabase = await createClient()
     const { data, error } = await supabase
         .from('products')
-        .select('*, categories(slug)')
+        .select('*, categories(name, slug)')
         .order('created_at', { ascending: false })
 
     if (error) {
@@ -199,25 +113,8 @@ export async function getProducts(): Promise<Product[]> {
         return []
     }
 
-    // Filter out legacy products from the entire app view
-    const wellnessItems = data.filter((item: any) => {
-        const name = item.name.toLowerCase();
-        const category = item.categories?.name?.toLowerCase() || "";
-        
-        const blockList = [
-            "osyndo", "nomad", "gan nano", "hub", "power bank", "case", 
-            "wallet", "cable", "apple watch", "kevlar", "band", "polish", 
-            "honey", "pet", "bowl", "leash", "toy", "mat", "dumbbell", 
-            "bottle", "cleanser", "roller", "gua sha"
-        ];
-        
-        const isBlocked = blockList.some(term => name.includes(term));
-        const isWellnessCategory = category.includes("wellness") || category.includes("daily");
-
-        return !isBlocked && isWellnessCategory;
-    })
-
-    return wellnessItems.map(mapProduct)
+    // Removed legacy tech blocklist. Full Epiccotn catalog visibility.
+    return data.map(mapProduct)
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | undefined> {

@@ -1,15 +1,24 @@
 import { notFound } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { getProductById, getNavigationCategories, getNotifications, getUserProfile } from "@/lib/fetchers"
-import { ProductDetail } from "@/components/product-detail"
+import { getProductById, getUserProfile } from "@/lib/fetchers"
+import { EpicProductDetail } from "@/components/epic-product-detail"
+import { TrustFeaturesSection } from "@/components/trust-features-section"
+import type { Metadata } from "next"
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const product = await getProductById(id)
+  return {
+    title: product ? `${product.name} | Epiccotn` : "Product | Epiccotn",
+    description: product?.subtitle ?? "Discover premium bamboo wellness innerwear by Epiccotn.",
+  }
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const [product, navCategories, notifications, user] = await Promise.all([
+  const [product, user] = await Promise.all([
     getProductById(id),
-    getNavigationCategories(),
-    getNotifications(),
     getUserProfile()
   ])
 
@@ -20,10 +29,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header navigationCategories={navCategories} notifications={notifications} />
-      <main className="pt-24 pb-16">
-        <ProductDetail product={product} isAdmin={isAdmin} />
+    <div className="min-h-screen bg-[#0A0A0A]" suppressHydrationWarning>
+      <Header />
+      <main className="pt-24 pb-0">
+        <EpicProductDetail product={product} isAdmin={isAdmin} />
+        <TrustFeaturesSection />
       </main>
       <Footer />
     </div>

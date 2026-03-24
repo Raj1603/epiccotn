@@ -32,7 +32,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       >
         <div className="flex flex-col h-full" suppressHydrationWarning>
           <div className="flex items-center justify-between p-6 border-b border-gray-100" suppressHydrationWarning>
-            <span className="text-xl font-serif font-bold text-gray-900 tracking-tight">
+            <span className="text-xl font-sans font-bold text-gray-900 tracking-tight">
               Epiccotn<span className="text-[var(--primary)]">™</span>
             </span>
             <button onClick={onClose} className="p-2 -mr-2" aria-label="Close menu">

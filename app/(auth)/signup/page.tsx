@@ -97,7 +97,7 @@ function SignupContent() {
                     <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-50" />
                     <div className="relative h-full flex items-center justify-center p-12">
                         <div className="text-white max-w-lg">
-                            <h1 className="text-4xl font-bold mb-6 font-serif italic">Epiccotn®</h1>
+                            <h1 className="text-4xl font-bold mb-6 font-sans italic">Epiccotn®</h1>
                             <h2 className="text-3xl font-bold mb-4">Almost there.</h2>
                             <p className="text-lg text-white/80">We've sent a verification link to your email. Once confirmed, you'll be redirected to continue where you left off.</p>
                         </div>
@@ -153,37 +153,38 @@ function SignupContent() {
 
     return (
         <div className="min-h-screen grid lg:grid-cols-2">
-            <div className="hidden lg:block relative bg-neutral-900">
-                <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-50" />
-                <div className="relative h-full flex items-center justify-center p-12">
-                    <div className="text-white max-w-lg">
-                        <h1 className="text-4xl font-bold mb-6">Join Epiccotn</h1>
-                        <p className="text-lg text-white/80">Create an account to track orders and get exclusive access.</p>
+            <div className="hidden lg:block relative bg-[#000]">
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-70" />
+                <div className="absolute inset-0 bg-black/30" />
+                <div className="relative h-full flex items-center justify-center p-12 z-10">
+                    <div className="text-[#FFFFFF] max-w-lg">
+                        <h1 className="text-[clamp(40px,5vw,64px)] font-syne font-bold leading-[0.95] tracking-tight uppercase mb-6">Join Epiccotn</h1>
+                        <p className="text-lg text-[#FFFFFF]/80 font-inter font-light leading-relaxed">Create an account to track orders and get exclusive access.</p>
                     </div>
                 </div>
             </div>
 
-            <div className="flex items-center justify-center p-8 bg-white">
+            <div className="flex items-center justify-center p-8 bg-background">
                 <div className="w-full max-w-md space-y-8">
                     <div className="text-center lg:text-left">
-                        <h2 className="text-3xl font-bold text-gray-900">Create an account</h2>
-                        <p className="mt-2 text-gray-600">Enter your details to get started</p>
+                        <h2 className="text-3xl font-syne font-bold text-foreground uppercase tracking-tight">Create an account</h2>
+                        <p className="mt-4 text-foreground/60 font-inter font-light">Enter your details to get started</p>
                     </div>
 
                     <form onSubmit={handleSignup} className="space-y-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="fullName">Full Name</Label>
+                        <div className="space-y-3">
+                            <Label htmlFor="fullName" className="font-syne text-[11px] font-bold uppercase tracking-wider text-foreground/60">Full Name</Label>
                             <Input
                                 id="fullName"
-                                placeholder="John Doe"
+                                placeholder="Jane Doe"
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 required
-                                className="h-11"
+                                className="h-14 bg-transparent border-border rounded-none focus-visible:ring-lime text-foreground px-4 text-base"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                        <div className="space-y-3">
+                            <Label htmlFor="email" className="font-syne text-[11px] font-bold uppercase tracking-wider text-foreground/60">Email</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -191,11 +192,11 @@ function SignupContent() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="h-11"
+                                className="h-14 bg-transparent border-border rounded-none focus-visible:ring-lime text-foreground px-4 text-base"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                        <div className="space-y-3">
+                            <Label htmlFor="password" className="font-syne text-[11px] font-bold uppercase tracking-wider text-foreground/60">Password</Label>
                             <div className="relative">
                                 <Input
                                     id="password"
@@ -203,13 +204,13 @@ function SignupContent() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="h-11 pr-10"
+                                    className="h-14 bg-transparent border-border rounded-none focus-visible:ring-lime text-foreground px-4 text-base pr-12"
                                     minLength={6}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                                    className="absolute right-4 top-4 text-foreground/40 hover:text-foreground/80 transition-colors focus:outline-none"
                                 >
                                     {showPassword ? (
                                         <EyeOff className="h-5 w-5" />
@@ -218,18 +219,18 @@ function SignupContent() {
                                     )}
                                 </button>
                             </div>
-                            <p className="text-xs text-gray-500">Must be at least 6 characters long</p>
+                            <p className="font-syne text-[10px] uppercase tracking-wider text-foreground/40">Must be at least 6 characters long</p>
                         </div>
 
-                        <Button type="submit" className="w-full h-11 bg-neutral-900 hover:bg-neutral-800" disabled={loading}>
-                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        <Button type="submit" className="w-full h-14 bg-lime hover:bg-lime-dk text-black rounded-none font-syne font-bold uppercase tracking-widest text-[13px] transition-all hover:-translate-y-[2px]" disabled={loading}>
+                            {loading ? <Loader2 className="mr-3 h-5 w-5 animate-spin" /> : null}
                             Create Account
                         </Button>
                     </form>
 
-                    <div className="text-center text-sm">
-                        <span className="text-gray-600">Already have an account? </span>
-                        <Link href="/login" className="font-bold text-gray-900 hover:underline">
+                    <div className="text-center text-[13px] font-inter border-t border-border pt-8 mt-10">
+                        <span className="text-foreground/50">Already have an account? </span>
+                        <Link href="/login" className="font-bold text-foreground hover:text-lime transition-colors">
                             Log in
                         </Link>
                     </div>

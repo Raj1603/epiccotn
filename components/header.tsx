@@ -1,142 +1,119 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, ShoppingBag, Bell, User, X } from "lucide-react"
+import { ShoppingBag, User, Menu, X, Bell, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Notification } from "@/lib/types"
-import { MobileMenu } from "./mobile-menu"
+import { useCart } from "@/hooks/use-cart"
 import { CartDrawer } from "./cart-drawer"
+import { SearchModal } from "./search-modal"
+import { toast } from "sonner"
 
 interface HeaderProps {
-  notifications: Notification[]
+  notifications?: any[]
 }
 
 export function Header({ notifications = [] }: HeaderProps) {
+  const [mounted, setMounted] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [cartOpen, setCartOpen] = useState(false)
-  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
+  const cart = useCart()
 
-  // Listen for custom event to open cart
   useEffect(() => {
-    const handleOpenCart = () => setCartOpen(true)
-    window.addEventListener('openCart', handleOpenCart)
-    return () => window.removeEventListener('openCart', handleOpenCart)
+    setMounted(true)
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100/50 shadow-sm transition-all duration-500 wellness-theme" suppressHydrationWarning>
+    <header 
+      suppressHydrationWarning
+      className={cn(
+      "fixed top-0 left-0 right-0 z-[300] h-[60px] flex items-center bg-black/95 backdrop-blur-xl border-b transition-colors duration-300",
+      isScrolled ? "border-lime/20" : "border-border-lt"
+    )}>
+      <div className="w-full max-w-[1440px] mx-auto px-6 lg:px-8 flex items-center justify-between">
+        <Link href="/" className="font-syne text-[24px] font-extrabold text-white tracking-[-0.02em] flex items-center">
+          Epiccotn<span className="w-2 h-2 bg-lime ml-0.5 mt-1.5" />
+        </Link>
 
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6" suppressHydrationWarning>
-          <div className="flex items-center justify-between h-20" suppressHydrationWarning>
-            {/* Mobile menu button */}
-            <button className="lg:hidden p-2 -ml-2" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
-              <Menu className="h-6 w-6 text-gray-900" />
-            </button>
-
-            <Link href="/" className="flex-shrink-0 group">
-              <span className="text-2xl font-sans font-black text-gray-900 tracking-tighter group-hover:opacity-80 transition-opacity">
-                Epiccotn<span className="text-[var(--primary)] text-3xl leading-none">.</span>
-              </span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-12 h-full" suppressHydrationWarning>
-              <Link
-                href="/#story"
-                className="relative text-sm font-semibold text-gray-600 tracking-wider transition-colors hover:text-gray-900 group"
-                onClick={(e) => {
-                  if (window.location.pathname === "/") {
-                    e.preventDefault();
-                    document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-              >
-                About Us
-                <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-gray-900 transition-all duration-300 group-hover:w-full rounded-full"></span>
+        {/* Desktop Nav Links & Custom Button */}
+        <div className="hidden lg:flex items-center gap-8">
+          <nav className="flex items-center gap-8">
+            {[
+              { name: "About Us", href: "/#about-us" },
+              { name: "Contact", href: "/contact" }
+            ].map((item) => (
+              <Link key={item.name} href={item.href} className="font-inter text-[13px] font-normal text-text-dim hover:text-white tracking-[0.02em] transition-colors">
+                {item.name}
               </Link>
-              <Link
-                href="/contact"
-                className="relative text-sm font-semibold text-gray-600 tracking-wider transition-colors hover:text-gray-900 group"
-              >
-                Contact
-                <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-gray-900 transition-all duration-300 group-hover:w-full rounded-full"></span>
-              </Link>
-              <button
-                onClick={() => setCartOpen(true)}
-                className="text-xs font-bold tracking-[0.15em] px-8 py-3.5 bg-black text-white hover:bg-gray-900 transition-colors uppercase"
-              >
-                SHOP NOW
-              </button>
-            </nav>
-
-            {/* Right actions */}
-            <div className="flex items-center gap-5" suppressHydrationWarning>
-              <div className="relative" suppressHydrationWarning>
-                <button
-                  className="hidden sm:flex hover:text-[var(--primary)] transition-colors"
-                  aria-label="Notifications"
-                  onClick={() => setNotificationsOpen(!notificationsOpen)}
-                >
-                  <Bell className="h-5 w-5" />
-                </button>
-
-                {/* Notifications Dropdown */}
-                {notificationsOpen && (
-                  <div className="absolute right-0 top-full mt-4 w-[400px] bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-50">
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-xl font-bold text-gray-900 font-serif">Notifications</h3>
-                      <button onClick={() => setNotificationsOpen(false)} className="text-gray-400 hover:text-gray-900">
-                        <X className="h-5 w-5" />
-                      </button>
-                    </div>
-                    <div className="space-y-4">
-                      {notifications.slice(0, 3).map((notification) => (
-                        <div
-                          key={notification.id}
-                          className="group flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-gray-100">
-                            <img
-                              src={notification.image}
-                              alt=""
-                              className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                            />
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-gray-900 text-sm mb-1">{notification.title}</h4>
-                            <p className="text-xs text-gray-600 leading-relaxed">{notification.description}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <Link href="/account" className="hidden sm:flex hover:text-[var(--primary)] transition-colors" aria-label="Account">
-                <User className="h-5 w-5" />
-              </Link>
-
-              <button
-                className="hover:text-[var(--primary)] transition-colors relative"
-                onClick={() => setCartOpen(true)}
-                aria-label="Cart"
-              >
-                <ShoppingBag className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
+            ))}
+          </nav>
+          
+          <Link href="/products" className="bg-lime text-black font-syne text-[12px] font-bold tracking-[0.06em] uppercase px-[22px] py-[9px] hover:bg-lime-dk transition-all hover:-translate-y-[1px]">
+            Shop Now
+          </Link>
         </div>
-      </header>
 
-      <MobileMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setIsSearchOpen(true)}
+            className="hidden sm:flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent"
+          >
+            <Search className="w-4 h-4" strokeWidth={1.5} />
+          </button>
 
-      {/* Click outside to close notifications */}
-      {notificationsOpen && <div className="fixed inset-0 z-40" onClick={() => setNotificationsOpen(false)} />}
-    </>
+          <button 
+            onClick={() => {
+              if (notifications.length > 0) {
+                toast.info(`You have ${notifications.length} new notifications!`)
+              } else {
+                toast("No new notifications", { duration: 2000 })
+              }
+            }}
+            className="hidden sm:flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent relative"
+          >
+            <Bell className="w-4 h-4" strokeWidth={1.5} />
+            {(mounted && notifications.length > 0) && (
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-lime text-black font-syne font-bold text-[9px] flex items-center justify-center rounded-full leading-none">
+                {notifications.length}
+              </span>
+            )}
+          </button>
+
+          <Link href="/account" className="hidden sm:flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent">
+            <User className="w-4 h-4" strokeWidth={1.5} />
+          </Link>
+          
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent relative"
+          >
+            <ShoppingBag className="w-4 h-4" strokeWidth={1.5} />
+            {(mounted && cart.items.length > 0) && (
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-lime text-black font-syne font-bold text-[9px] flex items-center justify-center rounded-full leading-none">
+                {cart.items.length}
+              </span>
+            )}
+          </button>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="lg:hidden w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:text-white flex ml-1"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      <SearchModal open={isSearchOpen} onOpenChange={setIsSearchOpen} />
+      <CartDrawer open={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    </header>
   )
 }
-
