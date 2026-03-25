@@ -29,7 +29,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         slug: "",
         subtitle: "",
         description: "",
-        price: "",
+        price: "" ,
         originalPrice: "",
         category_id: "",
         badge: "",
@@ -40,6 +40,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
     const [colorVariants, setColorVariants] = useState<ColorVariant[]>([])
     const [currentColor, setCurrentColor] = useState({ name: "", hex: "#000000", images: [""] })
+    const [variants, setVariants] = useState<string[]>([])
     const [categoriesList, setCategoriesList] = useState<{ id: string, name: string, slug: string }[]>([])
 
     useEffect(() => {
@@ -54,32 +55,9 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         try {
             const response = await fetch("/api/categories")
             const data = await response.json()
-            
-            // Cleanse the data from placeholder template legacy (Nomad Goods artifacts)
-            const cleanData = data.filter((cat: any) => {
-                const name = cat.name.toLowerCase()
-                return !name.includes('apple') && 
-                       !name.includes('watch') && 
-                       !name.includes('cases') && 
-                       !name.includes('charging') && 
-                       !name.includes('wallets') &&
-                       !name.includes('passport') &&
-                       !name.includes('gear')
-            })
-
-            // If we have no clean data, seed with Epiccotn DNA defaults for the UI
-            if (cleanData.length === 0) {
-                setCategoriesList([
-                    { id: 'bamboo', name: 'Bamboo Series', slug: 'bamboo' },
-                    { id: 'pima', name: 'Pima Silk Blend', slug: 'pima' },
-                    { id: 'seamless', name: 'Signature Seamless', slug: 'seamless' }
-                ])
-            } else {
-                setCategoriesList(cleanData)
-            }
-        } catch (error) {
-            console.error("Failed to load categories")
-        }
+            const cleanData = data.filter((cat: any) => !cat.name.toLowerCase().includes('apple'))
+            setCategoriesList(cleanData.length === 0 ? [{ id: 'bamboo', name: 'Bamboo Series', slug: 'bamboo' }] : cleanData)
+        } catch (error) { console.error("Failed to load categories") }
     }
 
     const fetchProduct = async (id: string) => {
@@ -101,14 +79,9 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 gallery: data.images?.slice(2) || ["", "", "", "", ""],
             })
 
-            if (data.color_variants) {
-                setColorVariants(data.color_variants)
-            }
-        } catch (error) {
-            toast.error("Failed to load product")
-        } finally {
-            setFetching(false)
-        }
+            if (data.color_variants) setColorVariants(data.color_variants)
+            if (data.variants) setVariants(data.variants)
+        } catch (error) { toast.error("Failed to load product") } finally { setFetching(false) }
     }
 
     const handleInputChange = (field: string, value: string) => {
@@ -146,7 +119,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 compare_at_price: formData.originalPrice ? Math.round(parseFloat(formData.originalPrice) * 100) : null,
                 category_id: formData.category_id,
                 images: images,
-                color_variants: colorVariants
+                color_variants: colorVariants,
+                variants: variants
             }
 
             const response = await fetch(`/api/products/${productId}`, {
@@ -293,7 +267,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                                     />
                                     {formData.image && (
                                         <div className="h-40 bg-muted border border-border relative overflow-hidden group/img">
-                                            <img src={formData.image} className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700" />
+                                            <img src={formData.image} className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700" alt="Master" />
                                         </div>
                                     )}
                                 </div>
@@ -306,7 +280,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                                     />
                                     {formData.hoverImage && (
                                         <div className="h-40 bg-muted border border-border relative overflow-hidden group/img">
-                                            <img src={formData.hoverImage} className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700" />
+                                            <img src={formData.hoverImage} className="w-full h-full object-cover grayscale group-hover/img:grayscale-0 transition-all duration-700" alt="Hover" />
                                         </div>
                                     )}
                                 </div>
@@ -424,6 +398,49 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                                     )}
                                 </div>
                             </div>
+                        </div>
+
+                        {/* 5. Size Matrix */}
+                        <div className="bg-card border border-border p-10 shadow-sm">
+                            <h2 className="text-xs font-bold font-syne uppercase tracking-[0.3em] text-muted-foreground border-l-2 border-primary pl-4 mb-2">
+                                Size Distribution
+                            </h2>
+                            <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mb-10">Select standard fleet sizes or define custom labels.</p>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                {["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].map((sz) => (
+                                    <button
+                                        key={sz}
+                                        type="button"
+                                        onClick={() => {
+                                            if (variants.includes(sz)) setVariants(variants.filter(v => v !== sz))
+                                            else setVariants([...variants, sz])
+                                        }}
+                                        className={cn(
+                                            "h-14 border font-syne font-black text-xs transition-all uppercase tracking-widest",
+                                            variants.includes(sz) 
+                                                ? "bg-primary border-primary text-primary-foreground shadow-lg" 
+                                                : "bg-background border-border text-muted-foreground hover:border-primary/50"
+                                        )}
+                                    >
+                                        {sz}
+                                    </button>
+                                ))}
+                            </div>
+                            
+                            {/* Selected View */}
+                            {variants.length > 0 && (
+                                <div className="mt-8 pt-8 border-t border-border flex flex-wrap gap-2">
+                                    {variants.map((v, i) => (
+                                        <div key={i} className="bg-muted px-4 py-2 font-syne font-bold text-[9px] uppercase tracking-widest text-primary flex items-center gap-2">
+                                            {v}
+                                            <button onClick={() => setVariants(variants.filter(x => x !== v))} className="hover:text-foreground">
+                                                <X className="w-2.5 h-2.5" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 

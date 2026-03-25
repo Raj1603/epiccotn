@@ -71,21 +71,27 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-[60px] right-6 w-full max-w-[420px] bg-black z-[300] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-t-[4px] border-lime overflow-hidden rounded-sm"
+            className="fixed top-[70px] right-4 sm:right-8 w-[calc(100%-2rem)] sm:max-w-[420px] bg-black z-[300] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-t-[4px] border-lime overflow-hidden rounded-sm"
           >
-            {/* Header section from image - mapped to Light style */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-border-lt bg-black">
-              <div className="flex items-baseline gap-2">
-                <span className="text-text-mid font-syne font-black text-lg uppercase tracking-tight">Subtotal :</span>
-                <span className="text-white font-syne font-black text-xl">{formatPrice(total)}</span>
+            {/* Header section */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border-lt bg-black">
+              <div className="flex flex-col">
+                <span className="text-text-dim font-syne font-bold text-[10px] uppercase tracking-widest mb-1">Your Basket</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-text-mid font-syne font-black text-sm uppercase tracking-tight">Subtotal :</span>
+                  <span className="text-white font-syne font-black text-lg">{formatPrice(total)}</span>
+                </div>
               </div>
-              {/* <button 
-                onClick={handleViewCart}
-                className="border border-white/20 px-6 py-2 text-[11px] font-bold text-white uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
+              
+              <button 
+                onClick={onClose}
+                className="w-10 h-10 rounded-full border border-border-lt flex items-center justify-center text-text-dim hover:text-white transition-all bg-white/5"
+                aria-label="Close drawer"
               >
-                View Cart
-              </button> */}
+                <X className="w-5 h-5" />
+              </button>
             </div>
+
 
             <div className="max-h-[450px] overflow-y-auto custom-scrollbar bg-black/95">
               {isEmpty ? (

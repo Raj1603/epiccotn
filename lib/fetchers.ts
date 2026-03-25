@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatDistanceToNow } from 'date-fns'
 import { Product, Category, NavigationCategory, Notification } from '@/lib/types'
 import { resolveProductImage, resolveCategoryImage } from '@/lib/image-fallbacks'
 
@@ -16,6 +17,10 @@ function mapProduct(item: any): Product {
         category: item.categories?.name || 'Uncategorized',
         categorySlug: item.categories?.slug || 'uncategorized',
         brand: 'Epiccotn',
+        colorVariants: item.color_variants,
+        variants: item.variants,
+        badge: item.badge,
+        images: item.images || [],
     }
 }
 
@@ -60,26 +65,56 @@ export async function getNavigationCategories(): Promise<NavigationCategory[]> {
 export async function getNotifications(): Promise<Notification[]> {
     const supabase = await createClient()
 
-    // Fetch all products to serve as hero announcements
-    const { data: latestProducts, error } = await supabase
-        .from('products')
+    // 1. Fetch real notifications from the table
+    const { data: dbNotifs, error: notifError } = await supabase
+        .from('notifications')
         .select('*')
+        .eq('active', true)
         .order('created_at', { ascending: false })
         .limit(10)
 
-    if (error || !latestProducts) return []
+    // 2. Fetch products as fallback announcements
+    const { data: latestProducts, error: prodError } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5)
 
-    // Removed legacy blocklist. Trusting the Epiccotn-only database.
-    return latestProducts.map((p: any) => ({
-        id: p.id,
-        title: "New Style Released",
-        description: `${p.name} is now available in the shop!`,
-        image: resolveProductImage(p.slug, (p.images && p.images[0]) || undefined),
-        time: 'Just now',
-        link: `/products/${p.slug}`,
-        badge: p.badge || 'EPICCOTN DNA'
-    }))
+    let allNotifs: Notification[] = []
+
+    if (dbNotifs && dbNotifs.length > 0) {
+        allNotifs = dbNotifs.map((n: any) => ({
+            id: n.id,
+            title: n.title,
+            description: n.description,
+            image: n.image || resolveProductImage('', undefined),
+            time: formatDistanceToNow(new Date(n.created_at), { addSuffix: true }),
+            created_at: n.created_at,
+            link: n.link || '/products',
+            badge: 'ANNOUNCEMENT'
+        }))
+    }
+
+    if (latestProducts && latestProducts.length > 0) {
+        const prodNotifs = latestProducts.map((p: any) => ({
+            id: p.id,
+            title: "New Style Released",
+            description: `${p.name} is now available in the shop!`,
+            image: resolveProductImage(p.slug, (p.images && p.images[0]) || undefined),
+            time: 'FEATURED',
+            created_at: p.created_at,
+            link: `/products/${p.slug}`,
+            badge: p.badge || 'EPICCOTN DNA'
+        }))
+        allNotifs = [...allNotifs, ...prodNotifs]
+    }
+
+
+    if (notifError) console.error('Error fetching notifications:', notifError)
+
+    return allNotifs
 }
+
 
 // Fetch only top-level categories for the homepage slider
 export async function getRootCategories(): Promise<Category[]> {

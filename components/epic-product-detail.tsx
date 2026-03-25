@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -10,15 +10,8 @@ import { toast } from "sonner"
 import type { Product } from "@/lib/types"
 
 /* ─── Static data ─────────────────────────────────────────── */
-const COLORS = [
-  { name: "Blush",  hex: "#C4907A", bg: "from-[#2C1E18] via-[#3A2520] to-[#281A14]", image: "/images/epiccotn/hero_confident_woman.png" },
-  { name: "Sage",   hex: "#8A9E7E", bg: "from-[#141E12] via-[#1C2A18] to-[#121A10]", image: "/images/epiccotn/lifestyle.png" },
-  { name: "Sand",   hex: "#C8B898", bg: "from-[#281E14] via-[#382418] to-[#221A10]", image: "/images/epiccotn/back.png" },
-  { name: "Night",  hex: "#3A3850", bg: "from-[#10101C] via-[#181828] to-[#0C0C18]", image: "/images/epiccotn/crotch.png" },
-]
-
 const SIZES = ["XS","S","M","L","XL","2XL","3XL","4XL"]
-const OOS   = ["3XL"]
+const OOS: string[] = [] // Default to none out of stock
 
 const FEATURES = [
   {
@@ -74,12 +67,17 @@ interface Props { product: Product; isAdmin?: boolean }
 
 export function EpicProductDetail({ product, isAdmin }: Props) {
   const [colorIdx,   setColorIdx]   = useState(0)
+  const [currentImgIdx, setCurrentImgIdx] = useState(0)
   const [selectedSz, setSelectedSz] = useState<string | null>(null)
   const [qty,        setQty]        = useState(1)
   const [bundle,     setBundle]     = useState(false)
   const [openAcc,    setOpenAcc]    = useState<number | null>(null)
   const [added,      setAdded]      = useState(false)
   const { addItem } = useCart()
+
+  useEffect(() => {
+    setCurrentImgIdx(0)
+  }, [colorIdx])
 
   const basePrice   = product.price ?? 14.90
   const origPrice   = product.originalPrice ?? Number((basePrice * 1.33).toFixed(2))
@@ -96,122 +94,127 @@ export function EpicProductDetail({ product, isAdmin }: Props) {
     setTimeout(() => setAdded(false), 2000)
   }
 
-  const col = COLORS[colorIdx]
+  const col = product.colorVariants?.[colorIdx] || { 
+    name: "Default", 
+    hex: "#000000", 
+    bg: "from-[#0A0A0A] via-[#111111] to-[#0A0A0A]", 
+    images: (product.colorVariants?.[0]?.images && product.colorVariants[0].images.length > 0) 
+      ? product.colorVariants[0].images 
+      : (product.images && product.images.length > 0)
+        ? product.images
+        : [
+          product.image,
+          "/images/epiccotn/back.png",
+          "/images/epiccotn/crotch.png",
+          "/images/epiccotn/lifestyle.png"
+        ] 
+  }
+  const mainImage = col.images?.[currentImgIdx] || col.images?.[0] || product.image
 
   return (
-    <div className="bg-[#0A0A0A] text-[#FFFFFF] min-h-screen font-inter antialiased" suppressHydrationWarning>
-
-
-      {/* ── 2-col product wrap ─────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-[#FFFFFF]/[0.08]" style={{ minHeight: "calc(100vh - 96px)" }}>
-
-        {/* ── LEFT: Sticky Gallery ─────────────────────────── */}
-        <div className="lg:sticky lg:top-[96px] lg:h-[calc(100vh-96px)] grid border-b lg:border-b-0 lg:border-r border-[#FFFFFF]/[0.08] overflow-hidden"
-             style={{ gridTemplateColumns: "64px 1fr" }}>
-
-          {/* thumb rail */}
-          <div className="flex flex-col gap-[2px] p-3 bg-[#111111] border-r border-[#FFFFFF]/[0.08]">
-            {COLORS.map((c, i) => (
-              <button
-                key={c.name}
-                onClick={() => setColorIdx(i)}
-                className={cn(
-                  "w-11 h-[52px] flex-shrink-0 border cursor-pointer transition-all relative overflow-hidden flex items-center justify-center",
-                  colorIdx === i ? "border-[#C8F542]" : "border-transparent hover:border-[#FFFFFF]/30"
-                )}
-              >
-                <Image src={c.image} alt={c.name} fill className="object-cover" sizes="44px" />
-              </button>
-            ))}
-          </div>
-
-          {/* main view */}
-          <div className={cn("relative flex items-center justify-center overflow-hidden bg-gradient-to-br transition-all duration-500", col.bg)}>
-            {/* product image */}
+    <div className="bg-[#FDFDFD] text-[#0A0A0A] min-h-screen font-inter antialiased" suppressHydrationWarning>
+      <div className="flex flex-col lg:grid lg:grid-cols-2 border-b border-neutral-100" style={{ minHeight: "calc(100vh - 96px)" }}>
+        {/* IMAGE SECTION */}
+        <div className="lg:sticky lg:top-[96px] lg:h-[calc(100vh-96px)] flex flex-col lg:grid lg:border-r border-neutral-100 overflow-hidden"
+             style={{ lgGridTemplateColumns: "64px 1fr" } as any}>
+          
+          {/* Main Image Container - First on Mobile */}
+          <div className={cn("relative order-1 lg:order-2 flex-1 aspect-[4/5] lg:aspect-auto flex items-center justify-center overflow-hidden bg-gradient-to-br transition-all duration-500", col.bg || "from-[#0A0A0A] to-[#111111]")}>
             <Image
-              src={col.image}
-              alt={`Bamboo Classic — ${col.name}`}
+              src={mainImage}
+              alt={`${product.name} — ${col.name}`}
               fill
               className="object-cover transition-all duration-700 opacity-90"
-              sizes="50vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
-            {/* dark overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/40 via-transparent to-[#0A0A0A]/20 pointer-events-none" />
-
-            {/* badge TL */}
-            <div className="absolute top-[18px] left-[18px] z-10 font-syne font-bold text-[10px] tracking-[0.12em] uppercase bg-[#0A0A0A]/75 backdrop-blur-md border border-[#FFFFFF]/[0.08] text-[#FFFFFF]/45 px-3 py-[5px]">
-              Bamboo Classic — {col.name}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute top-[18px] left-[18px] z-10 font-syne font-bold text-[10px] tracking-[0.12em] uppercase bg-white/75 backdrop-blur-md border border-neutral-100 text-neutral-400 px-3 py-[5px]">
+              {product.name} — {col.name}
             </div>
-
-            {/* color dot TR */}
-            <div className="absolute top-[18px] right-[18px] z-10 w-[10px] h-[10px] rounded-full border border-[#FFFFFF]/20 transition-all duration-300"
+            <div className="absolute top-[18px] right-[18px] z-10 w-[10px] h-[10px] rounded-full border border-neutral-200 transition-all duration-300"
                  style={{ background: col.hex }}/>
-
-            {/* badge BL */}
-            <div className="absolute bottom-[18px] left-[18px] z-10 flex items-center gap-2 bg-[#C8F542]/[0.08] border border-[#C8F542]/20 px-[14px] py-[6px]">
-              <div className="w-[5px] h-[5px] rounded-full bg-[#C8F542] flex-shrink-0"/>
-              <span className="font-syne font-bold text-[10px] text-[#C8F542] tracking-[0.10em] uppercase">OEKO-TEX Certified</span>
+            <div className="absolute bottom-[18px] left-[18px] z-10 flex items-center gap-2 bg-[#C8F542]/[0.1] border border-[#C8F542]/30 px-[14px] py-[6px]">
+              <div className="w-[5px] h-[5px] rounded-full bg-lime-600 flex-shrink-0"/>
+              <span className="font-syne font-bold text-[10px] text-lime-700 tracking-[0.10em] uppercase">OEKO-TEX Certified</span>
             </div>
+          </div>
+
+          {/* Thumbnails - Horizontal on Mobile, Sidebar on Desktop */}
+          <div className="order-2 lg:order-1 flex lg:flex-col gap-[2px] p-2 lg:p-3 bg-[#F5F5F5] border-t lg:border-t-0 lg:border-r border-neutral-100 overflow-x-auto lg:overflow-y-auto no-scrollbar lg:custom-scrollbar scroll-smooth">
+            {col.images.map((img: string, i: number) => (
+              <button
+                key={i}
+                onClick={() => setCurrentImgIdx(i)}
+                className={cn(
+                  "w-[60px] lg:w-11 h-[80px] lg:h-[52px] flex-shrink-0 border cursor-pointer transition-all relative overflow-hidden flex items-center justify-center",
+                  currentImgIdx === i ? "border-[#C8F542]" : "border-transparent hover:border-[#FFFFFF]/30"
+                )}
+              >
+                <Image src={img} alt={`${product.name} view ${i}`} fill className="object-cover" sizes="60px" />
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* ── RIGHT: Product Info ───────────────────────────── */}
         <div className="px-8 lg:px-14 py-12 overflow-y-auto flex flex-col gap-0">
-
-
-          {/* heading */}
           <motion.h1 initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:.08, duration:.5 }}
-            className="font-syne text-[clamp(40px,4.5vw,64px)] font-extrabold leading-[.9] tracking-[-0.03em] uppercase text-[#FFFFFF] mb-2">
-            Rediscover<br/>Your
-            <span className="text-[#C8F542] italic text-[.82em] block"> Comfort.</span>
+            className="font-syne text-[clamp(40px,4.5vw,64px)] font-extrabold leading-[.9] tracking-[-0.03em] uppercase text-neutral-900 mb-2">
+            {product.name.split(' ').map((word, i) => (
+                <span key={i} className={i === product.name.split(' ').length - 1 ? "text-lime-600 italic text-[.82em] block" : ""}>
+                    {word}{' '}
+                </span>
+            ))}
           </motion.h1>
-
-
-
-          {/* price */}
+          <p className="font-inter text-[15px] font-light text-neutral-500 max-w-[400px] leading-relaxed mb-8">
+            {product.subtitle}
+          </p>
           <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:.16, duration:.5 }}
             className="flex items-baseline gap-2.5 mb-7">
-            <span className="font-syne font-bold text-[38px] text-[#FFFFFF] tracking-[-0.02em] leading-none">
+            <span className="font-syne font-bold text-[38px] text-neutral-900 tracking-[-0.02em] leading-none">
               ${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
-            <span className="font-syne font-bold text-[20px] text-[#FFFFFF]/45 line-through">${origPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-            <span className="font-syne font-bold text-[10px] tracking-[.10em] uppercase bg-[#C8F542]/10 border border-[#C8F542]/25 text-[#C8F542] px-[10px] py-1">
-              Save {savePct}%
-            </span>
+            {origPrice > basePrice && (
+              <span className="font-syne font-bold text-[20px] text-neutral-300 line-through">${origPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            )}
+            {savePct > 0 && (
+              <span className="font-syne font-bold text-[10px] tracking-[.10em] uppercase bg-lime-50 border border-lime-100 text-lime-700 px-[10px] py-1">
+                Save {savePct}%
+              </span>
+            )}
           </motion.div>
-
-          {/* colour */}
-          <p className="font-syne font-bold text-[10px] tracking-[0.16em] uppercase text-[#FFFFFF]/45 mb-2.5">
-            Colour: <span className="text-[#FFFFFF]">{col.name}</span>
-          </p>
-          <div className="flex gap-2 flex-wrap mb-6">
-            {COLORS.map((c, i) => (
-              <button
-                key={c.name}
-                onClick={() => setColorIdx(i)}
-                style={{ background: c.hex }}
-                className={cn(
-                  "w-8 h-8 border-2 cursor-pointer transition-all relative outline-none",
-                  colorIdx === i ? "border-[#C8F542] ring-1 ring-[#C8F542]/40 ring-offset-2 ring-offset-[#0A0A0A]" : "border-transparent hover:border-[#FFFFFF]/30"
-                )}
-                title={c.name}
-              >
-                {colorIdx === i && (
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <svg className="w-3 h-3" viewBox="0 0 13 13" fill="none" stroke="#0A0A0A" strokeWidth="2.5"><polyline points="2 6.5 5.5 10 11 3"/></svg>
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* size */}
-          <p className="font-syne font-bold text-[10px] tracking-[0.16em] uppercase text-[#FFFFFF]/45 mb-2.5">
-            Size: <span className="text-[#FFFFFF]">{selectedSz ?? "Select"}</span>
+          {product.colorVariants && product.colorVariants.length > 0 && (
+            <>
+              <p className="font-syne font-bold text-[10px] tracking-[0.16em] uppercase text-neutral-400 mb-2.5">
+                Colour: <span className="text-neutral-900">{col.name}</span>
+              </p>
+              <div className="flex gap-2 flex-wrap mb-6">
+                {product.colorVariants.map((c, i) => (
+                  <button
+                    key={c.name}
+                    onClick={() => setColorIdx(i)}
+                    style={{ background: c.hex }}
+                    className={cn(
+                      "w-8 h-8 border-2 cursor-pointer transition-all relative outline-none",
+                      colorIdx === i ? "border-[#C8F542] ring-1 ring-[#C8F542]/40 ring-offset-2 ring-offset-[#0A0A0A]" : "border-transparent hover:border-[#FFFFFF]/30"
+                    )}
+                    title={c.name}
+                  >
+                    {colorIdx === i && (
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <svg className="w-3 h-3" viewBox="0 0 13 13" fill="none" stroke="#0A0A0A" strokeWidth="2.5"><polyline points="2 6.5 5.5 10 11 3"/></svg>
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+          <p className="font-syne font-bold text-[10px] tracking-[0.16em] uppercase text-neutral-400 mb-2.5">
+            Size: <span className="text-neutral-900">{selectedSz ?? "Select"}</span>
           </p>
           <div className="flex gap-1.5 flex-wrap mb-2">
-            {SIZES.map(sz => {
+            {(product.variants || SIZES).map(sz => {
               const oos = OOS.includes(sz)
               return (
                 <button key={sz}
@@ -220,53 +223,45 @@ export function EpicProductDetail({ product, isAdmin }: Props) {
                   className={cn(
                     "min-w-[48px] h-[42px] px-3 font-syne text-[12px] font-bold tracking-[.04em] uppercase border transition-all",
                     oos
-                      ? "opacity-25 cursor-not-allowed line-through border-[#FFFFFF]/[0.08] text-[#FFFFFF]/70"
+                      ? "opacity-25 cursor-not-allowed line-through border-neutral-100 text-neutral-300"
                       : selectedSz === sz
-                        ? "bg-[#C8F542] border-[#C8F542] text-[#0A0A0A]"
-                        : "bg-transparent border-[#FFFFFF]/[0.08] text-[#FFFFFF]/70 hover:border-[#FFFFFF]/30 hover:text-[#FFFFFF]"
+                        ? "bg-black border-black text-white"
+                        : "bg-transparent border-neutral-200 text-neutral-600 hover:border-neutral-900 hover:text-neutral-900"
                   )}
                 >{sz}</button>
               )
             })}
           </div>
-
-          {/* qty */}
           <div className="flex items-center gap-4 mb-6">
-            <span className="font-syne font-bold text-[10px] tracking-[0.16em] uppercase text-[#FFFFFF]/45">Qty</span>
-            <div className="flex items-center border border-[#FFFFFF]/[0.08]">
+            <span className="font-syne font-bold text-[10px] tracking-[0.16em] uppercase text-neutral-400">Qty</span>
+            <div className="flex items-center border border-neutral-100">
               <button onClick={() => setQty(q => Math.max(1, q-1))}
-                className="w-[38px] h-[38px] flex items-center justify-center text-[#FFFFFF]/45 hover:text-[#C8F542] hover:bg-[#C8F542]/5 transition-all text-lg">
+                className="w-[38px] h-[38px] flex items-center justify-center text-neutral-400 hover:text-neutral-900 hover:bg-neutral-50 transition-all text-lg">
                 −
               </button>
-              <div className="w-11 h-[38px] flex items-center justify-center font-syne font-bold text-[13px] text-[#FFFFFF] border-x border-[#FFFFFF]/[0.08]">
+              <div className="w-11 h-[38px] flex items-center justify-center font-syne font-bold text-[13px] text-neutral-900 border-x border-neutral-100">
                 {qty}
               </div>
               <button onClick={() => setQty(q => q+1)}
-                className="w-[38px] h-[38px] flex items-center justify-center text-[#FFFFFF]/45 hover:text-[#C8F542] hover:bg-[#C8F542]/5 transition-all text-lg">
+                className="w-[38px] h-[38px] flex items-center justify-center text-neutral-400 hover:text-neutral-900 hover:bg-neutral-50 transition-all text-lg">
                 +
               </button>
             </div>
           </div>
-
-
-          {/* CTA */}
           <div className="flex flex-col gap-2 mb-10">
             <button onClick={handleAdd}
               className={cn(
                 "w-full flex items-center justify-between font-syne text-[14px] font-extrabold tracking-[.05em] uppercase px-8 py-[18px] transition-all",
                 added
-                  ? "bg-[#A8D020] text-[#0A0A0A]"
-                  : "bg-[#C8F542] hover:bg-[#A8D020] hover:-translate-y-[1px] text-[#0A0A0A]"
+                  ? "bg-neutral-800 text-[#FFFFFF]"
+                  : "bg-[#0A0A0A] hover:bg-neutral-800 hover:-translate-y-[1px] text-[#FFFFFF]"
               )}>
-              <span>{added ? "Added!" : "Add to Cart"}</span>
-              <span className="font-syne font-bold text-[15px]">${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              <span className="text-[#FFFFFF]">{added ? "Added!" : "Add to Cart"}</span>
+              <span className="font-syne font-bold text-[15px] text-[#FFFFFF]">${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </button>
           </div>
-
         </div>
       </div>
-
-
     </div>
   )
 }

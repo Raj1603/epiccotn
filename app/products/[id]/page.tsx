@@ -29,7 +29,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]" suppressHydrationWarning>
+    <div className="min-h-screen bg-[#FDFDFD]" suppressHydrationWarning>
       <Header />
       <main className="pt-24 pb-0">
         <EpicProductDetail product={product} isAdmin={isAdmin} />

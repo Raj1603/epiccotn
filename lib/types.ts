@@ -2,6 +2,7 @@ export interface ColorVariant {
     name: string
     hex: string
     images: string[] // First: main image, Second: hover image
+    bg?: string
 }
 
 export interface Product {
@@ -20,6 +21,7 @@ export interface Product {
     category: string
     categorySlug: string
     brand: string
+    images?: string[]
 }
 
 export interface Category {
@@ -59,9 +61,11 @@ export interface Notification {
     description: string
     image: string
     time: string | null
+    created_at?: string
     link?: string
     badge?: string
 }
+
 
 export interface Address {
     line1: string

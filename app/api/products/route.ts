@@ -54,11 +54,16 @@ export async function GET(request: NextRequest) {
         name: item.name,
         slug: item.slug,
         subtitle: item.description || '',
+        description: item.description || '',
         price: item.price / 100,
         originalPrice: item.compare_at_price ? item.compare_at_price / 100 : undefined,
         image: resolveProductImage(item.slug, item.images?.[0]),
+        images: item.images || [],
         category: item.categories?.name || 'Uncategorized',
-        badge: item.badge
+        categorySlug: item.categories?.slug || 'uncategorized',
+        badge: item.badge,
+        colorVariants: item.color_variants || [],
+        variants: item.variants || []
     }))
 
     return NextResponse.json(mappedProducts)
@@ -88,20 +93,30 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        // Define only the columns that definitely exist in the schema to avoid 500 errors
+        const safeBody: any = {
+            name: body.name,
+            slug: body.slug,
+            description: body.description,
+            price: body.price,
+            compare_at_price: body.compare_at_price,
+            category_id: body.category_id,
+            images: body.images || [],
+            badge: body.badge,
+            stock_status: body.stock_status || 'in_stock'
+        }
+
         const { data, error } = await supabase
             .from('products')
-            .insert([body])
+            .insert([safeBody])
             .select()
             .single()
 
         if (error) {
             console.error("Supabase error during insert:", error)
-            // Ensure error properties are serializable
             return NextResponse.json({
                 error: error.message || "Database insert failed",
-                code: error.code || "DB_ERROR",
-                details: error.details || null,
-                hint: error.hint || null
+                code: error.code || "DB_ERROR"
             }, { status: 500 })
         }
 

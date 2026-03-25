@@ -208,47 +208,53 @@ export function WellnessProductDetail() {
             </p>
           </motion.div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse min-w-[600px]">
-              <thead>
-                <tr>
-                  <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[36%]">Product Feature</th>
-                  <th className="bg-lime/5 border-b border-lime/30 text-center relative w-[21%]">
-                    <div className="absolute top-0 inset-x-0 h-[2px] bg-lime" />
-                    <div className="flex flex-col items-center gap-1.5 py-4">
-                      <span className="bg-lime text-black font-syne font-bold text-[9px] px-2.5 py-[3px] tracking-[0.08em] uppercase">Best Pick</span>
-                      <span className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase text-lime">Epiccotn</span>
-                    </div>
-                  </th>
-                  <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[21%]">Traditional Pads</th>
-                  <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[22%]">Synthetic Brands</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { f: "Organic certified fabric", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
-                  { f: "PFAS-free construction", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
-                  { f: "4-layer ProTech core", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
-                  { f: "Dermatologist approved", e: "✓", t: "—", s: "Varies", c1: true, c2: false, c3: false, ts: true },
-                  { f: "Lasts 2+ years", e: "✓", t: "—", s: "✓", c1: true, c2: false, c3: true },
-                  { f: "Replaces 150+ pads/year", e: "✓", t: "—", s: "✓", c1: true, c2: false, c3: true },
-                ].map((row, i) => (
-                  <tr key={i} className="group transition-colors">
-                    <td className="py-4.5 px-7 text-[13px] font-light text-white/45 border-b border-border group-hover:bg-white/5">{row.f}</td>
-                    <td className="py-4.5 px-7 bg-lime/10 text-center border-b border-border group-hover:bg-lime/20">
-                      <span className="text-[16px] text-lime">{row.e}</span>
-                    </td>
-                    <td className="py-4.5 px-7 text-[13px] font-light border-b border-border group-hover:bg-white/5">
-                      <span className="text-[16px] text-white/15">{row.t}</span>
-                    </td>
-                    <td className="py-4.5 px-7 text-[13px] font-light border-b border-border group-hover:bg-white/5 text-white/45">
-                      <span className={cn("text-[16px]", row.c3 ? "text-lime" : row.ts ? "" : "text-white/15")}>{row.s}</span>
-                    </td>
+          <div className="relative overflow-hidden">
+            {/* Scroll hint gradient for mobile */}
+            <div className="absolute right-0 inset-y-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none lg:hidden" />
+            
+            <div className="overflow-x-auto custom-scrollbar">
+              <table className="w-full border-collapse min-w-[700px] lg:min-w-0">
+                <thead>
+                  <tr>
+                    <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[30%]">Product Feature</th>
+                    <th className="bg-lime/5 border-b border-lime/30 text-center relative w-[25%] px-4">
+                      <div className="absolute top-0 inset-x-0 h-[2px] bg-lime" />
+                      <div className="flex flex-col items-center gap-1.5 py-4">
+                        <span className="bg-lime text-black font-syne font-bold text-[9px] px-2.5 py-[3px] tracking-[0.08em] uppercase">Best Pick</span>
+                        <span className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase text-lime">Epiccotn</span>
+                      </div>
+                    </th>
+                    <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[22%]">Traditional Pads</th>
+                    <th className="font-syne font-bold text-[11px] tracking-[0.1em] uppercase py-4 px-7 text-left text-text-dim border-b border-border w-[23%]">Synthetic Brands</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {[
+                    { f: "Organic certified fabric", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
+                    { f: "PFAS-free construction", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
+                    { f: "4-layer ProTech core", e: "✓", t: "—", s: "—", c1: true, c2: false, c3: false },
+                    { f: "Dermatologist approved", e: "✓", t: "—", s: "Varies", c1: true, c2: false, c3: false, ts: true },
+                    { f: "Lasts 2+ years", e: "✓", t: "—", s: "✓", c1: true, c2: false, c3: true },
+                    { f: "Replaces 150+ pads/year", e: "✓", t: "—", s: "✓", c1: true, c2: false, c3: true },
+                  ].map((row, i) => (
+                    <tr key={i} className="group transition-colors">
+                      <td className="py-4.5 px-7 text-[13px] font-light text-white/45 border-b border-border group-hover:bg-white/5 whitespace-nowrap">{row.f}</td>
+                      <td className="py-4.5 px-7 bg-lime/10 text-center border-b border-border group-hover:bg-lime/20">
+                        <span className="text-[16px] text-lime font-bold">{row.e}</span>
+                      </td>
+                      <td className="py-4.5 px-7 text-[13px] font-light border-b border-border group-hover:bg-white/5">
+                        <span className="text-[16px] text-white/15">{row.t}</span>
+                      </td>
+                      <td className="py-4.5 px-7 text-[13px] font-light border-b border-border group-hover:bg-white/5 text-white/45">
+                        <span className={cn("text-[16px]", row.c3 ? "text-lime font-bold" : row.ts ? "" : "text-white/15")}>{row.s}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
+
         </div>
       </section>
 

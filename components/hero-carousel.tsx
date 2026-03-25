@@ -64,10 +64,10 @@ export function HeroCarousel() {
   const slide = carouselData[currentSlide]
 
   return (
-    <section className="relative w-full h-[85vh] min-h-[750px] overflow-hidden bg-[#FAFAFA] flex items-center justify-center pt-[60px]">
+    <section className="relative w-full h-[90vh] lg:h-[85vh] min-h-[600px] lg:min-h-[750px] overflow-hidden bg-[#FAFAFA] flex items-center justify-center pt-[60px]">
       
       {/* 1. Global Background Large Text (Behind everything) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none select-none z-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -75,7 +75,7 @@ export function HeroCarousel() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-syne text-[clamp(280px,40vw,800px)] font-extrabold text-[#0A0A0A]/[0.015] leading-none tracking-[-0.05em] uppercase whitespace-nowrap"
+            className="font-syne text-[clamp(120px,40vw,800px)] font-extrabold text-[#0A0A0A]/[0.015] leading-none tracking-[-0.05em] uppercase whitespace-nowrap"
           >
             {slide.bgText}
           </motion.div>
@@ -85,32 +85,32 @@ export function HeroCarousel() {
       <div className="relative w-full max-w-[1440px] mx-auto h-full flex flex-col lg:flex-row items-center px-6 lg:px-20 z-10 pointer-events-none">
         
         {/* 2. LEFT CONTENT (Text) - Positioned higher to allow overlap */}
-        <div className="w-full lg:w-[60%] flex flex-col justify-center text-left py-12 lg:py-0 z-20 pointer-events-auto">
+        <div className="w-full lg:w-[60%] flex flex-col justify-center text-left py-4 lg:py-0 z-20 pointer-events-auto mt-16 sm:mt-24 lg:mt-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 30 }}
+              exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <span className="font-syne font-bold text-[13px] font-black tracking-[0.35em] uppercase text-[#000] mb-10 block opacity-40">
+              <span className="font-syne font-bold text-[9px] lg:text-[13px] font-black tracking-[0.35em] uppercase text-[#000] mb-2 lg:mb-10 block opacity-40">
                 {slide.eyebrow}
               </span>
               
-              <h1 className="font-syne text-[clamp(48px,6vw,92px)] font-extrabold leading-[1.05] tracking-[-0.04em] text-[#050505] mb-10 drop-shadow-sm">
+              <h1 className="font-syne text-[clamp(28px,6vw,92px)] font-extrabold leading-[1.0] lg:leading-[1.05] tracking-[-0.04em] text-[#050505] mb-4 lg:mb-10 drop-shadow-sm uppercase">
                 {slide.heading}
               </h1>
 
-              <div className="flex flex-col gap-12">
-                <p className="font-inter text-[18px] font-normal leading-[1.85] text-[#000] max-w-[480px] opacity-70">
+              <div className="flex flex-col gap-4 lg:gap-12">
+                <p className="font-inter text-[13px] lg:text-[18px] font-normal leading-relaxed lg:leading-[1.85] text-[#000] max-w-[480px] opacity-70">
                   {slide.sub}
                 </p>
 
                 <div className="flex items-center gap-6">
                   <Link 
                     href="/products"
-                    className="h-16 px-16 bg-[#000] text-[#FFF] font-syne text-[12px] font-bold tracking-[0.25em] uppercase hover:bg-lime hover:text-black transition-all duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.3)] flex items-center justify-center group"
+                    className="h-12 lg:h-16 px-8 lg:px-16 bg-[#000] text-[#FFF] font-syne text-[10px] lg:text-[12px] font-bold tracking-[0.25em] uppercase hover:bg-lime hover:text-black transition-all duration-300 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.3)] flex items-center justify-center group"
                   >
                     Learn More
                     <ArrowRight className="ml-2 w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -121,9 +121,10 @@ export function HeroCarousel() {
           </AnimatePresence>
         </div>
 
-        {/* 3. RIGHT PARTITION (Boxed Image with Shadow) - Positioned lower */}
-        <div className="w-full lg:w-[40%] h-[500px] lg:h-full flex items-center justify-center lg:justify-end z-10 pointer-events-auto">
-          <div className="relative w-full max-w-[580px] aspect-[4/5] bg-neutral-200 group overflow-visible">
+
+        {/* 3. RIGHT PARTITION (Boxed Image with Shadow - prioritize) */}
+        <div className="w-full lg:w-[40%] flex-1 flex items-center justify-center lg:justify-end z-10 pointer-events-auto pb-10 lg:pb-0">
+          <div className="relative w-full max-w-[480px] lg:max-w-[580px] aspect-[4/5] bg-neutral-200 group overflow-visible">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
@@ -131,7 +132,7 @@ export function HeroCarousel() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 1.02, y: -15 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-x-4 lg:inset-x-0 inset-y-0 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.2)] overflow-hidden bg-white"
+                className="absolute inset-x-2 lg:inset-x-0 inset-y-0 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.2)] overflow-hidden bg-white"
               >
                 <Image
                   src={slide.image}
@@ -147,11 +148,12 @@ export function HeroCarousel() {
         </div>
       </div>
 
+
       {/* 4. NAVIGATION (Forced High Contrast Circular Buttons) */}
       <div className="absolute inset-y-0 left-0 lg:left-8 flex items-center z-50 pointer-events-none">
         <button 
           onClick={handlePrev}
-          className="w-16 h-16 rounded-full bg-white text-black border-2 border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 pointer-events-auto ml-4 scale-95 lg:scale-110"
+          className="w-16 h-16 rounded-full bg-white text-black border-2 border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 pointer-events-auto ml-4 scale-85 lg:scale-110"
           aria-label="Previous Slide"
         >
           <ChevronLeft className="w-8 h-8" strokeWidth={3} />
@@ -160,7 +162,7 @@ export function HeroCarousel() {
       <div className="absolute inset-y-0 right-0 lg:right-8 flex items-center z-50 pointer-events-none">
         <button 
           onClick={handleNext}
-          className="w-16 h-16 rounded-full bg-white text-black border-2 border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 pointer-events-auto mr-4 scale-95 lg:scale-110"
+          className="w-16 h-16 rounded-full bg-white text-black border-2 border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 pointer-events-auto mr-4 scale-85 lg:scale-110"
           aria-label="Next Slide"
         >
           <ChevronRight className="w-8 h-8" strokeWidth={3} />
