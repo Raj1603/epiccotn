@@ -63,9 +63,10 @@ function LoginContent() {
 
     return (
         <div suppressHydrationWarning className="min-h-screen grid lg:grid-cols-2">
-            <div className="hidden lg:block relative bg-[#000]">
-                <div className="absolute inset-0 bg-[url('/images/epiccotn/hero.png')] bg-cover bg-center opacity-70" />
-                <div className="absolute inset-0 bg-black/30" />
+            <div className="hidden lg:block relative bg-[#0A0A0A]">
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-85" />
+                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="relative h-full flex items-center justify-center p-12 z-10">
                     <div className="text-[#FFFFFF] max-w-lg">
                         <h1 className="text-[clamp(40px,5vw,64px)] font-syne font-bold leading-[0.95] tracking-tight uppercase mb-6">Welcome Back</h1>
@@ -75,8 +76,11 @@ function LoginContent() {
             </div>
 
             <div className="flex items-center justify-center p-8 bg-background">
-                <div className="w-full max-w-md space-y-8">
+                <div className="w-full max-w-md space-y-10">
                     <div className="text-center lg:text-left">
+                        <Link href="/" className="inline-flex font-syne text-[24px] font-extrabold text-foreground tracking-[-0.02em] items-center mb-10">
+                            Epiccotn<span className="w-2 h-2 bg-lime ml-0.5 mt-1.5" />
+                        </Link>
                         <h2 className="text-3xl font-syne font-bold text-foreground uppercase tracking-tight">Sign in</h2>
                         <p className="mt-4 text-foreground/60 font-inter font-light">Enter your details to access your account</p>
                     </div>

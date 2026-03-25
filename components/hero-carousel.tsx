@@ -123,8 +123,8 @@ export function HeroCarousel() {
 
 
         {/* 3. RIGHT PARTITION (Boxed Image with Shadow - prioritize) */}
-        <div className="w-full lg:w-[40%] flex-1 flex items-center justify-center lg:justify-end z-10 pointer-events-auto pb-10 lg:pb-0">
-          <div className="relative w-full max-w-[480px] lg:max-w-[580px] aspect-[4/5] bg-neutral-200 group overflow-visible">
+        <div className="w-full lg:w-[40%] flex-1 flex items-center justify-center lg:justify-end z-10 pointer-events-auto pb-6 lg:pb-0 h-full">
+          <div className="relative w-full max-w-full lg:max-w-[580px] aspect-[5/4] lg:aspect-[4/5] bg-neutral-100 group overflow-visible">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
@@ -132,7 +132,7 @@ export function HeroCarousel() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 1.02, y: -15 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-x-2 lg:inset-x-0 inset-y-0 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.2)] overflow-hidden bg-white"
+                className="absolute inset-0 lg:inset-x-0 inset-y-0 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] lg:shadow-[0_60px_120px_-20px_rgba(0,0,0,0.2)] overflow-hidden bg-white"
               >
                 <Image
                   src={slide.image}
@@ -141,7 +141,7 @@ export function HeroCarousel() {
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-0 ring-1 ring-inset ring-black/10" />
+                <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
               </motion.div>
             </AnimatePresence>
           </div>
@@ -149,41 +149,41 @@ export function HeroCarousel() {
       </div>
 
 
-      {/* 4. NAVIGATION (Forced High Contrast Circular Buttons) */}
-      <div className="absolute inset-y-0 left-0 lg:left-8 flex items-center z-50 pointer-events-none">
+      {/* 4. NAVIGATION */}
+      <div className="absolute inset-y-0 left-0 lg:left-12 flex items-center z-50 pointer-events-none">
         <button 
           onClick={handlePrev}
-          className="w-16 h-16 rounded-full bg-white text-black border-2 border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 pointer-events-auto ml-4 scale-85 lg:scale-110"
+          className="w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-transparent hover:bg-black/5 text-neutral-400 hover:text-neutral-900 transition-all duration-300 pointer-events-auto ml-2 lg:ml-4 flex items-center justify-center"
           aria-label="Previous Slide"
         >
-          <ChevronLeft className="w-8 h-8" strokeWidth={3} />
+          <ChevronLeft className="w-8 lg:w-10 h-8 lg:h-10 stroke-[1.5px]" />
         </button>
       </div>
-      <div className="absolute inset-y-0 right-0 lg:right-8 flex items-center z-50 pointer-events-none">
+      <div className="absolute inset-y-0 right-0 lg:right-12 flex items-center z-50 pointer-events-none">
         <button 
           onClick={handleNext}
-          className="w-16 h-16 rounded-full bg-white text-black border-2 border-black/5 shadow-[0_15px_35px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 pointer-events-auto mr-4 scale-85 lg:scale-110"
+          className="w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-transparent hover:bg-black/5 text-neutral-400 hover:text-neutral-900 transition-all duration-300 pointer-events-auto mr-2 lg:mr-4 flex items-center justify-center"
           aria-label="Next Slide"
         >
-          <ChevronRight className="w-8 h-8" strokeWidth={3} />
+          <ChevronRight className="w-8 lg:w-10 h-8 lg:h-10 stroke-[1.5px]" />
         </button>
       </div>
 
-      {/* 5. SLIDE INDICATORS (High contrast) */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-12 z-50">
-        <div className="flex gap-4">
+      {/* 5. SLIDE INDICATORS */}
+      <div className="absolute bottom-6 lg:bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-6 lg:gap-12 z-50">
+        <div className="flex gap-2 lg:gap-4">
           {carouselData.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
               className={cn(
-                "h-1.5 rounded-full transition-all duration-700",
-                currentSlide === i ? "w-16 bg-black" : "w-4 bg-black/10"
+                "h-1 lg:h-1.5 rounded-full transition-all duration-700",
+                currentSlide === i ? "w-8 lg:w-16 bg-black" : "w-2 lg:w-4 bg-black/10"
               )}
             />
           ))}
         </div>
-        <span className="font-syne font-bold text-[14px] font-black tracking-[0.2em] text-black">
+        <span className="hidden lg:block font-syne font-bold text-[14px] font-black tracking-[0.2em] text-black">
           {String(currentSlide + 1).padStart(2, '0')} — {String(carouselData.length).padStart(2, '0')}
         </span>
       </div>

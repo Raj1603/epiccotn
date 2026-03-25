@@ -1,127 +1,78 @@
 "use client"
 
-import Link from "next/link"
-import { X, Instagram, Facebook, Youtube } from "lucide-react"
-import { cn } from "@/lib/utils"
+import NextLink from "next/link"
+import { Instagram, Facebook, Youtube, Menu } from "lucide-react"
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetHeader, 
+  SheetTitle, 
+  SheetTrigger 
+} from "@/components/ui/sheet"
 
-interface MobileMenuProps {
-  open: boolean
-  onClose: () => void
-}
-
-export function MobileMenu({ open, onClose }: MobileMenuProps) {
+export function MobileMenu() {
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        suppressHydrationWarning
-        className={cn(
-          "fixed inset-0 bg-black/40 z-50 transition-opacity",
-          open ? "opacity-100" : "opacity-0 pointer-events-none",
-        )}
-        onClick={onClose}
-      />
+    <Sheet>
+      <SheetTrigger asChild>
+        <button 
+          className="lg:hidden flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all bg-transparent"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="w-5 h-5" strokeWidth={1.5} />
+        </button>
+      </SheetTrigger>
+      <SheetContent side="left" className="bg-black border-white/10 p-0 w-full max-w-[300px]">
+        <SheetHeader className="p-6 border-b border-white/5 text-left">
+          <SheetTitle className="font-syne text-[20px] font-extrabold text-white tracking-tight flex items-center">
+            Epiccotn<span className="w-1.5 h-1.5 bg-lime ml-0.5 mt-1" />
+          </SheetTitle>
+        </SheetHeader>
 
-      {/* Menu panel */}
-      <div
-        suppressHydrationWarning
-        className={cn(
-          "fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 transform transition-transform duration-300 wellness-theme",
-          open ? "translate-x-0" : "-translate-x-full",
-        )}
-      >
-        <div className="flex flex-col h-full" suppressHydrationWarning>
-          <div className="flex items-center justify-between p-6 border-b border-gray-100" suppressHydrationWarning>
-            <span className="text-xl font-sans font-bold text-gray-900 tracking-tight">
-              Epiccotn<span className="text-[var(--primary)]">™</span>
-            </span>
-            <button onClick={onClose} className="p-2 -mr-2" aria-label="Close menu">
-              <X className="h-6 w-6 text-gray-900" />
-            </button>
-          </div>
+        <nav className="flex flex-col p-6 space-y-8">
+          <NextLink
+            href="/#about-us"
+            className="text-[20px] font-syne font-bold text-white uppercase tracking-tight hover:text-lime transition-colors"
+          >
+            About Us
+          </NextLink>
 
-          <nav className="flex-1 overflow-y-auto py-8 px-6 space-y-6">
-            <Link
-              href="/#story"
-              className="block text-lg font-sans font-medium text-gray-900"
-              onClick={() => {
-                onClose();
-                document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+          <NextLink
+            href="/products"
+            className="text-[20px] font-syne font-bold text-white uppercase tracking-tight hover:text-lime transition-colors"
+          >
+            Shop Now
+          </NextLink>
+
+          <NextLink
+            href="/contact"
+            className="text-[20px] font-syne font-bold text-white uppercase tracking-tight hover:text-lime transition-colors"
+          >
+            Contact
+          </NextLink>
+
+          <div className="pt-8 border-t border-white/5 flex flex-col space-y-6">
+            <NextLink
+              href="/account"
+              className="text-[14px] font-inter font-medium text-white/40 hover:text-white transition-colors"
             >
-              About Us
-            </Link>
-
-            <Link
-              href="/contact"
-              className="block text-lg font-sans font-medium text-gray-900"
-              onClick={onClose}
-            >
-              Contact
-            </Link>
-
-            <button
-              className="block text-lg font-sans font-medium text-gray-900 text-left w-full"
-              onClick={() => {
-                onClose();
-                window.dispatchEvent(new CustomEvent('openCart'));
-              }}
-            >
-              Shop Now
-            </button>
-
-            <div className="pt-6 border-t border-gray-100">
-              <Link
-                href="/account"
-                className="block text-base font-medium text-gray-600 mb-4"
-                onClick={onClose}
-              >
-                My Account
-              </Link>
-              <Link
-                href="/checkout"
-                className="block text-base font-medium text-[var(--primary)]"
-                onClick={onClose}
-              >
-                Checkout
-              </Link>
-            </div>
-          </nav>
-
-          <div className="border-t border-gray-100 p-8" suppressHydrationWarning>
-            <div className="flex items-center gap-6" suppressHydrationWarning>
-              <a
-                href="https://www.instagram.com/epiccotn1/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[var(--primary)] transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-6 w-6" />
+              My Account
+            </NextLink>
+            
+            <div className="flex items-center gap-6 pt-4">
+              <a href="https://instagram.com/epiccotn1" target="_blank" rel="noreferrer" className="text-white/20 hover:text-lime transition-colors" aria-label="Instagram">
+                <Instagram className="w-5 h-5" />
               </a>
-              <a
-                href="https://www.facebook.com/profile.php?id=61588227026428"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[var(--primary)] transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="h-6 w-6" />
+              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-white/20 hover:text-lime transition-colors" aria-label="Facebook">
+                <Facebook className="w-5 h-5" />
               </a>
-              <a
-                href="https://www.youtube.com/@epiccotn"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[var(--primary)] transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="h-6 w-6" />
+              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="text-white/20 hover:text-lime transition-colors" aria-label="YouTube">
+                <Youtube className="w-5 h-5" />
               </a>
             </div>
           </div>
-        </div>
-      </div>
-    </>
+        </nav>
+      </SheetContent>
+    </Sheet>
   )
 }
 

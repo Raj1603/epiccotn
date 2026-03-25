@@ -7,6 +7,7 @@ import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { useCart } from "@/hooks/use-cart"
 import { toast } from "sonner"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { Product } from "@/lib/types"
 
 /* ─── Static data ─────────────────────────────────────────── */
@@ -115,8 +116,7 @@ export function EpicProductDetail({ product, isAdmin }: Props) {
     <div className="bg-[#FDFDFD] text-[#0A0A0A] min-h-screen font-inter antialiased" suppressHydrationWarning>
       <div className="flex flex-col lg:grid lg:grid-cols-2 border-b border-neutral-100" style={{ minHeight: "calc(100vh - 96px)" }}>
         {/* IMAGE SECTION */}
-        <div className="lg:sticky lg:top-[96px] lg:h-[calc(100vh-96px)] flex flex-col lg:grid lg:border-r border-neutral-100 overflow-hidden"
-             style={{ lgGridTemplateColumns: "64px 1fr" } as any}>
+        <div className="lg:sticky lg:top-[96px] lg:h-[calc(100vh-96px)] flex flex-col lg:grid lg:grid-cols-[64px_1fr] lg:border-r border-neutral-100 overflow-hidden">
           
           {/* Main Image Container - First on Mobile */}
           <div className={cn("relative order-1 lg:order-2 flex-1 aspect-[4/5] lg:aspect-auto flex items-center justify-center overflow-hidden bg-gradient-to-br transition-all duration-500", col.bg || "from-[#0A0A0A] to-[#111111]")}>
@@ -129,6 +129,27 @@ export function EpicProductDetail({ product, isAdmin }: Props) {
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none" />
+            
+            {/* NAVIGATION BUTTONS */}
+            {col.images.length > 1 && (
+              <>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setCurrentImgIdx((prev) => (prev - 1 + col.images.length) % col.images.length) }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-transparent hover:bg-black/5 text-neutral-400 hover:text-neutral-900 transition-all duration-300"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-8 h-8 stroke-[1.5px]" />
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setCurrentImgIdx((prev) => (prev + 1) % col.images.length) }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-transparent hover:bg-black/5 text-neutral-400 hover:text-neutral-900 transition-all duration-300"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-8 h-8 stroke-[1.5px]" />
+                </button>
+              </>
+            )}
+
             <div className="absolute top-[18px] left-[18px] z-10 font-syne font-bold text-[10px] tracking-[0.12em] uppercase bg-white/75 backdrop-blur-md border border-neutral-100 text-neutral-400 px-3 py-[5px]">
               {product.name} — {col.name}
             </div>

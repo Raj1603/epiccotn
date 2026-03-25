@@ -96,7 +96,7 @@ export function FeaturesSlider() {
                                         <div className="absolute bottom-0 left-0 right-0 p-8">
                                             <p className="font-syne font-bold text-[10px] text-lime tracking-[0.12em] uppercase mb-2">0{i + 1}</p>
                                             <h3 className="font-syne text-2xl font-bold text-white uppercase tracking-tight mb-2">{feature.title}</h3>
-                                            <p className="text-white/60 text-sm font-light leading-relaxed max-w-[260px] opacity-0 translate-y-4 transition-all duration-300 group-hover/card:opacity-100 group-hover/card:translate-y-0">
+                                            <p className="text-white/70 text-[13px] font-light leading-relaxed max-w-[260px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 transition-all duration-500 group-hover/card:opacity-100 group-hover/card:translate-y-0 mt-3">
                                                 {feature.description}
                                             </p>
                                         </div>
@@ -106,12 +106,12 @@ export function FeaturesSlider() {
                         ))}
                     </CarouselContent>
                     
-                    <div className="absolute -top-16 right-0 flex gap-3">
-                        <CarouselPrevious className="static translate-y-0 h-12 w-12 rounded-full bg-black text-white border-none hover:bg-neutral-800 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-center">
-                            <ArrowLeft className="w-6 h-6" strokeWidth={3} />
+                    <div className="absolute -top-16 right-0 flex gap-1 lg:gap-2">
+                        <CarouselPrevious className="static translate-y-0 h-12 w-12 rounded-full bg-transparent text-neutral-400 hover:text-neutral-900 border-none transition-all flex items-center justify-center hover:bg-black/5">
+                            <ArrowLeft className="w-8 h-8 stroke-[1.5px]" />
                         </CarouselPrevious>
-                        <CarouselNext className="static translate-y-0 h-12 w-12 rounded-full bg-black text-white border-none hover:bg-neutral-800 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-center">
-                            <ArrowRight className="w-6 h-6" strokeWidth={3} />
+                        <CarouselNext className="static translate-y-0 h-12 w-12 rounded-full bg-transparent text-neutral-400 hover:text-neutral-900 border-none transition-all flex items-center justify-center hover:bg-black/5">
+                            <ArrowRight className="w-8 h-8 stroke-[1.5px]" />
                         </CarouselNext>
                     </div>
                 </Carousel>

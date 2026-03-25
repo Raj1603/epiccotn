@@ -26,10 +26,11 @@ export default async function ContactPage() {
 
         <div className="w-full max-w-xl mx-auto relative z-10">
           {/* Header */}
-          <div className="text-center mb-16">
-            <p className="font-syne font-bold text-[11px] tracking-[0.2em] uppercase text-lime mb-4">Get in Touch</p>
-            <h1 className="font-syne text-[48px] font-extrabold text-white tracking-tight uppercase leading-[0.9]">
-              Innovation in<br/><span className="text-lime">Dialogue.</span>
+          <div className="text-center mb-12 lg:mb-16">
+            <p className="font-syne font-bold text-[10px] lg:text-[11px] tracking-[0.2em] uppercase text-lime mb-3 lg:mb-4">Get in Touch</p>
+            <h1 className="font-syne text-[clamp(36px,8vw,64px)] font-extrabold text-white tracking-tight uppercase leading-[1.0] lg:leading-[0.9]">
+              Innovation in<br />
+              <span className="text-lime">Dialogue.</span>
             </h1>
           </div>
 

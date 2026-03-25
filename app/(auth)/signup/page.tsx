@@ -104,45 +104,45 @@ function SignupContent() {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center p-8 bg-white">
+                <div className="flex items-center justify-center p-8 bg-background">
                     <div className="w-full max-w-md space-y-8">
                         <div className="text-center">
                             <div className="flex justify-center mb-6">
-                                <div className="h-20 w-20 bg-neutral-50 rounded-full flex items-center justify-center border border-neutral-100 shadow-sm">
-                                    <Mail className="h-10 w-10 text-neutral-900" />
+                                <div className="h-20 w-20 bg-lime/10 rounded-full flex items-center justify-center border border-lime/20 shadow-sm">
+                                    <Mail className="h-10 w-10 text-lime" />
                                 </div>
                             </div>
-                            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Verify your email</h2>
-                            <p className="mt-4 text-gray-500 leading-relaxed">
+                            <h2 className="text-3xl font-syne font-bold text-foreground uppercase tracking-tight">Verify your email</h2>
+                            <p className="mt-4 text-foreground/60 font-inter font-light leading-relaxed">
                                 A confirmation link has been sent to:<br />
-                                <span className="font-semibold text-neutral-900">{email}</span>
+                                <span className="font-bold text-foreground">{email}</span>
                             </p>
                         </div>
 
                         <div className="space-y-4">
                             <Button
                                 variant="outline"
-                                className="w-full h-12 rounded-full border-neutral-200 hover:bg-neutral-50 transition-all font-medium"
+                                className="w-full h-14 rounded-none border-border hover:bg-black/5 transition-all font-syne font-bold uppercase tracking-wider text-[12px] text-foreground"
                                 onClick={handleResendEmail}
                                 disabled={resending}
                             >
-                                {resending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCcw className="mr-2 h-4 w-4" />}
+                                {resending ? <Loader2 className="mr-3 h-5 w-5 animate-spin" /> : <RefreshCcw className="mr-3 h-5 w-5" />}
                                 Resend verification email
                             </Button>
 
                             <div className="text-center pt-4">
                                 <button
                                     onClick={() => setSuccess(false)}
-                                    className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors underline underline-offset-4"
+                                    className="text-[11px] font-syne font-bold uppercase tracking-widest text-foreground/40 hover:text-lime transition-colors underline underline-offset-4"
                                 >
                                     Used the wrong email? Use another one
                                 </button>
                             </div>
                         </div>
 
-                        <div className="pt-8 border-t border-neutral-100 text-center">
-                            <p className="text-xs text-neutral-400">
-                                Having trouble? Contact <Link href="/support" className="text-neutral-900 font-medium">customer support</Link>
+                        <div className="pt-8 border-t border-border text-center">
+                            <p className="text-[10px] uppercase font-syne font-bold tracking-widest text-foreground/20">
+                                Having trouble? Contact <Link href="/support" className="text-lime hover:underline">customer support</Link>
                             </p>
                         </div>
                     </div>
@@ -153,9 +153,10 @@ function SignupContent() {
 
     return (
         <div className="min-h-screen grid lg:grid-cols-2">
-            <div className="hidden lg:block relative bg-[#000]">
-                <div className="absolute inset-0 bg-[url('/images/epiccotn/lifestyle.png')] bg-cover bg-center opacity-70" />
-                <div className="absolute inset-0 bg-black/30" />
+            <div className="hidden lg:block relative bg-[#0A0A0A]">
+                <div className="absolute inset-0 bg-[url('/images/epiccotn/hero_sleeping_woman_new.png')] bg-cover bg-center opacity-85" />
+                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="relative h-full flex items-center justify-center p-12 z-10">
                     <div className="text-[#FFFFFF] max-w-lg">
                         <h1 className="text-[clamp(40px,5vw,64px)] font-syne font-bold leading-[0.95] tracking-tight uppercase mb-6">Join Epiccotn</h1>
@@ -165,8 +166,11 @@ function SignupContent() {
             </div>
 
             <div className="flex items-center justify-center p-8 bg-background">
-                <div className="w-full max-w-md space-y-8">
+                <div className="w-full max-w-md space-y-10">
                     <div className="text-center lg:text-left">
+                        <Link href="/" className="inline-flex font-syne text-[24px] font-extrabold text-foreground tracking-[-0.02em] items-center mb-10">
+                            Epiccotn<span className="w-2 h-2 bg-lime ml-0.5 mt-1.5" />
+                        </Link>
                         <h2 className="text-3xl font-syne font-bold text-foreground uppercase tracking-tight">Create an account</h2>
                         <p className="mt-4 text-foreground/60 font-inter font-light">Enter your details to get started</p>
                     </div>

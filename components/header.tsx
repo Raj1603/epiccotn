@@ -11,6 +11,7 @@ import { motion } from "framer-motion"
 import { CartDrawer } from "./cart-drawer"
 import { SearchModal } from "./search-modal"
 import { NotificationDrawer } from "./notification-drawer"
+import { MobileMenu } from "./mobile-menu"
 import { toast } from "sonner"
 
 interface HeaderProps {
@@ -91,9 +92,12 @@ export function Header({ notifications = [] }: HeaderProps) {
       isScrolled ? "border-lime/20" : "border-border-lt"
     )}>
       <div className="w-full max-w-[1440px] mx-auto px-6 lg:px-8 flex items-center justify-between">
-        <Link href="/" className="font-syne text-[24px] font-extrabold text-white tracking-[-0.02em] flex items-center">
-          Epiccotn<span className="w-2 h-2 bg-lime ml-0.5 mt-1.5" />
-        </Link>
+        <div className="flex items-center gap-4">
+          <MobileMenu />
+          <Link href="/" className="font-syne text-[22px] lg:text-[24px] font-extrabold text-white tracking-[-0.02em] flex items-center group">
+            Epiccotn<span className="w-2 h-2 bg-lime ml-0.5 mt-1.5 transition-transform group-hover:scale-125" />
+          </Link>
+        </div>
 
         {/* Desktop Nav Links & Custom Button */}
         <div className="hidden lg:flex items-center gap-8">
@@ -118,13 +122,15 @@ export function Header({ notifications = [] }: HeaderProps) {
           <button 
             onClick={() => setIsSearchOpen(true)}
             className="flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent"
+            aria-label="Search products"
           >
             <Search className="w-4 h-4" strokeWidth={1.5} />
           </button>
 
           <button 
             onClick={() => setIsNotificationsOpen(true)}
-            className="flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent relative"
+            className="hidden sm:flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent relative"
+            aria-label={`Show ${visibleNotifications.length} notifications`}
           >
             <Bell className="w-4 h-4" strokeWidth={1.5} />
             {(mounted && visibleNotifications.length > 0) && (
@@ -141,13 +147,14 @@ export function Header({ notifications = [] }: HeaderProps) {
             )}
           </button>
 
-          <Link href="/account" className="flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent">
+          <Link href="/account" className="hidden sm:flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent" aria-label="Your account">
             <User className="w-4 h-4" strokeWidth={1.5} />
           </Link>
           
           <button 
             onClick={() => setIsCartOpen(true)}
             className="flex w-9 h-9 border border-border-lt items-center justify-center text-text-dim hover:border-white/25 hover:text-white transition-all cursor-pointer bg-transparent relative"
+            aria-label={`Open shopping cart with ${cart.items.length} items`}
           >
             <ShoppingBag className="w-4 h-4" strokeWidth={1.5} />
             {(mounted && cart.items.length > 0) && (
