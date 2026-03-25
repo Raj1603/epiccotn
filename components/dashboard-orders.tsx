@@ -37,7 +37,7 @@ export function DashboardOrders() {
                 <div key={order.id} className="p-6 hover:bg-white/[0.02] transition-colors">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
                         <div>
-                            <p className="text-xs font-mono font-medium text-white/40 uppercase tracking-widest">Order #{order.id.slice(0, 8)}</p>
+                            <p className="text-[11px] font-syne font-bold text-white/40 uppercase tracking-[0.2em]">Order #{order.id.slice(0, 8)}</p>
                             <p className="text-xs text-white/60 mt-1 font-inter">
                                 Placed on {new Date(order.created_at).toLocaleDateString()}
                             </p>
@@ -65,7 +65,7 @@ export function DashboardOrders() {
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-sm font-semibold text-white uppercase font-syne tracking-tight">{item.product.name}</p>
-                                    <p className="text-xs text-white/40 font-mono uppercase">Qty: {item.quantity}</p>
+                                    <p className="text-[10px] text-white/40 font-syne font-bold uppercase tracking-wider">Qty: {item.quantity}</p>
                                 </div>
                             </div>
                         ))}
